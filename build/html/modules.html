@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Manual Installation of Perl Modules &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="manual-installation-of-perl-modules">
+<span id="install-perlmodules-manual"></span><h1>Manual Installation of Perl Modules<a class="headerlink" href="#manual-installation-of-perl-modules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="instructions">
+<span id="modules-manual-instructions"></span><h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>If you need to install Perl modules manually, here&#8217;s how it&#8217;s done.
+Download the module using the link given in the next section, and then
+apply this magic incantation, as root:</p>
+<div class="highlight-python"><pre>``bash#`` tar -xzvf &lt;module&gt;.tar.gz``bash#`` cd &lt;module&gt;``bash#`` perl Makefile.PL``bash#`` make``bash#`` make test``bash#`` make install</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to compile source code under Windows you will need to obtain
+a &#8216;make&#8217; utility.  The <strong class="command">nmake</strong> utility provided with
+Microsoft Visual C++ may be used.  As an alternative, there is a
+utility called <strong class="command">dmake</strong> available from CPAN which is
+written entirely in Perl.
+As described in <a class="reference internal" href="#modules-manual-download"><em>Download Locations</em></a>, however, most
+packages already exist and are available from ActiveState or theory58S.
+We highly recommend that you install them using the ppm GUI available with
+ActiveState and to add the theory58S repository to your list of repositories.</p>
+</div>
+</div>
+<div class="section" id="download-locations">
+<span id="modules-manual-download"></span><h2>Download Locations<a class="headerlink" href="#download-locations" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Running Bugzilla on Windows requires the use of ActiveState
+Perl 5.10.1 or higher. Many modules already exist in the core
+distribution of ActiveState Perl. Additional modules can be downloaded
+from <a class="reference external" href="http://cpan.uwinnipeg.ca/PPMPackages/10xx/">http://cpan.uwinnipeg.ca/PPMPackages/10xx/</a>
+if you use Perl 5.10.1.</p>
+</div>
+<p>CGI:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/CGI.pm/&gt;`_
+Documentation: `&lt;http://perldoc.perl.org/CGI.html&gt;`_</pre>
+</div>
+<p>Data-Dumper:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/Data-Dumper/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/Data-Dumper/Dumper.pm&gt;`_</pre>
+</div>
+<p>Date::Format (part of TimeDate):</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/TimeDate/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/TimeDate/lib/Date/Format.pm&gt;`_</pre>
+</div>
+<p>DBI:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/DBI/&gt;`_
+Documentation: `&lt;http://dbi.perl.org/docs/&gt;`_</pre>
+</div>
+<p>DBD::mysql:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/DBD-mysql/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/DBD-mysql/lib/DBD/mysql.pm&gt;`_</pre>
+</div>
+<p>DBD::Pg:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/DBD-Pg/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/DBD-Pg/Pg.pm&gt;`_</pre>
+</div>
+<p>Template-Toolkit:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/Template-Toolkit/&gt;`_
+Documentation: `&lt;http://www.template-toolkit.org/docs.html&gt;`_</pre>
+</div>
+<p>GD:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/GD/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/GD/GD.pm&gt;`_</pre>
+</div>
+<p>Template::Plugin::GD:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/Template-GD/&gt;`_
+Documentation: `&lt;http://www.template-toolkit.org/docs/aqua/Modules/index.html&gt;`_</pre>
+</div>
+<p>MIME::Parser (part of MIME-tools):</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/MIME-tools/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/MIME-tools/lib/MIME/Parser.pm&gt;`_</pre>
+</div>
+</div>
+<div class="section" id="optional-modules">
+<span id="modules-manual-optional"></span><h2>Optional Modules<a class="headerlink" href="#optional-modules" title="Permalink to this headline">¶</a></h2>
+<p>Chart::Lines:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/Chart/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/Chart/Chart.pod&gt;`_</pre>
+</div>
+<p>GD::Graph:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/GDGraph/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/GDGraph/Graph.pm&gt;`_</pre>
+</div>
+<p>GD::Text::Align (part of GD::Text::Util):</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/GDTextUtil/&gt;`_
+Documentation: `&lt;http://search.cpan.org/dist/GDTextUtil/Text/Align.pm&gt;`_</pre>
+</div>
+<p>XML::Twig:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/dist/XML-Twig/&gt;`_
+Documentation: `&lt;http://standards.ieee.org/resources/spasystem/twig/twig_stable.html&gt;`_</pre>
+</div>
+<p>PatchReader:</p>
+<div class="highlight-python"><pre>CPAN Download Page: `&lt;http://search.cpan.org/author/JKEISER/PatchReader/&gt;`_
+Documentation: `&lt;http://www.johnkeiser.com/mozilla/Patch_Viewer.html&gt;`_</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Manual Installation of Perl Modules</a><ul>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+<li><a class="reference internal" href="#download-locations">Download Locations</a></li>
+<li><a class="reference internal" href="#optional-modules">Optional Modules</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/modules.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>0-9, high ascii &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="high-ascii">
+<span id="glossary"></span><h1>0-9, high ascii<a class="headerlink" href="#high-ascii" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>.htaccess</dt>
+<dd>Apache web server, and other NCSA-compliant web servers,
+observe the convention of using files in directories called
+<tt class="file docutils literal"><span class="pre">.htaccess</span></tt>
+to restrict access to certain files. In Bugzilla, they are used
+to keep secret files which would otherwise
+compromise your installation - e.g. the
+<tt class="file docutils literal"><span class="pre">localconfig</span></tt>
+file contains the password to your database.
+curious.</dd>
+</dl>
+</div>
+<div class="section" id="a">
+<span id="gloss-a"></span><h1>A<a class="headerlink" href="#a" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Apache</dt>
+<dd><p class="first">In this context, Apache is the web server most commonly used
+for serving up Bugzilla
+pages. Contrary to popular belief, the apache web server has nothing
+to do with the ancient and noble Native American tribe, but instead
+derived its name from the fact that it was
+<tt class="docutils literal"><span class="pre">a</span> <span class="pre">patchy</span></tt>
+version of the original
+NCSA
+world-wide-web server.
+Useful Directives when configuring Bugzilla
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<tt class="docutils literal"><span class="pre">`AddHandler</span> <span class="pre">&lt;http://httpd.apache.org/docs/2.0/mod/mod_mime.html#addhandler&gt;`_</span></tt></p>
+<blockquote>
+<div>Tell Apache that it&#8217;s OK to run CGI scripts.</div></blockquote>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">`AllowOverride</span> <span class="pre">&lt;http://httpd.apache.org/docs-2.0/mod/core.html#allowoverride&gt;`_</span></tt>, <tt class="docutils literal"><span class="pre">`Options</span> <span class="pre">&lt;http://httpd.apache.org/docs-2.0/mod/core.html#options&gt;`_</span></tt></dt>
+<dd>These directives are used to tell Apache many things about
+the directory they apply to. For Bugzilla&#8217;s purposes, we need
+them to allow script execution and <tt class="file docutils literal"><span class="pre">.htaccess</span></tt>
+overrides.</dd>
+<dt><tt class="docutils literal"><span class="pre">`DirectoryIndex</span> <span class="pre">&lt;http://httpd.apache.org/docs-2.0/mod/mod_dir.html#directoryindex&gt;`_</span></tt></dt>
+<dd>Used to tell Apache what files are indexes. If you can
+not add <tt class="file docutils literal"><span class="pre">index.cgi</span></tt> to the list of valid files,
+you&#8217;ll need to set <tt class="docutils literal"><span class="pre">$index_html</span></tt> to
+1 in <tt class="file docutils literal"><span class="pre">localconfig</span></tt> so
+<strong class="command">./checksetup.pl</strong> will create an
+<tt class="file docutils literal"><span class="pre">index.html</span></tt> that redirects to
+<tt class="file docutils literal"><span class="pre">index.cgi</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">`ScriptInterpreterSource</span> <span class="pre">&lt;http://httpd.apache.org/docs-2.0/mod/core.html#scriptinterpretersource&gt;`_</span></tt></dt>
+<dd>Used when running Apache on windows so the shebang line
+doesn&#8217;t have to be changed in every Bugzilla script.</dd>
+</dl>
+<p class="last">For more information about how to configure Apache for Bugzilla,
+see <a class="reference internal" href="installation.html#http-apache"><em>Bugzilla using Apache</em></a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="b">
+<span id="gloss-b"></span><h1>B<a class="headerlink" href="#b" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Bug</dt>
+<dd>A
+<tt class="docutils literal"><span class="pre">bug</span></tt>
+in Bugzilla refers to an issue entered into the database which has an
+associated number, assignments, comments, etc. Some also refer to a
+<tt class="docutils literal"><span class="pre">tickets</span></tt>
+or
+<tt class="docutils literal"><span class="pre">issues</span></tt>;
+in the context of Bugzilla, they are synonymous.</dd>
+<dt>Bug Number</dt>
+<dd>Each Bugzilla bug is assigned a number that uniquely identifies
+that bug. The bug associated with a bug number can be pulled up via a
+query, or easily from the very front page by typing the number in the
+&#8220;Find&#8221; box.</dd>
+<dt>Bugzilla</dt>
+<dd>Bugzilla is the world-leading free software bug tracking system.</dd>
+</dl>
+</div>
+<div class="section" id="c">
+<span id="gloss-c"></span><h1>C<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Common Gateway Interface (CGI)</dt>
+<dd>CGI is an acronym for Common Gateway Interface. This is
+a standard for interfacing an external application with a web server. Bugzilla
+is an example of a CGI application.</dd>
+<dt>Component</dt>
+<dd>A Component is a subsection of a Product. It should be a narrow
+category, tailored to your organization. All Products must contain at
+least one Component (and, as a matter of fact, creating a Product
+with no Components will create an error in Bugzilla).</dd>
+<dt>Comprehensive Perl Archive Network (CPAN)</dt>
+<dd><p class="first">CPAN
+stands for the
+<tt class="docutils literal"><span class="pre">Comprehensive</span> <span class="pre">Perl</span> <span class="pre">Archive</span> <span class="pre">Network</span></tt>.
+CPAN maintains a large number of extremely useful
+Perl
+modules - encapsulated chunks of code for performing a
+particular task.</p>
+<p>The <tt class="file docutils literal"><span class="pre">contrib</span></tt> directory is
+a location to put scripts that have been contributed to Bugzilla but
+are not a part of the official distribution. These scripts are written
+by third parties and may be in languages other than perl. For those
+that are in perl, there may be additional modules or other requirements
+than those of the official distribution.
+.. note:: Scripts in the <tt class="file docutils literal"><span class="pre">contrib</span></tt></p>
+<blockquote class="last">
+<div>directory are not officially supported by the Bugzilla team and may
+break in between versions.</div></blockquote>
+</dd>
+</dl>
+</div>
+<div class="section" id="d">
+<span id="gloss-d"></span><h1>D<a class="headerlink" href="#d" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>daemon</dt>
+<dd>A daemon is a computer program which runs in the background. In
+general, most daemons are started at boot time via System V init
+scripts, or through RC scripts on BSD-based systems.
+mysqld,
+the MySQL server, and
+apache,
+a web server, are generally run as daemons.</dd>
+<dt>DOS Attack</dt>
+<dd>A DOS, or Denial of Service attack, is when a user attempts to
+deny access to a web server by repeatedly accessing a page or sending
+malformed requests to a webserver. A D-DOS, or
+Distributed Denial of Service attack, is when these requests come
+from multiple sources at the same time. Unfortunately, these are much
+more difficult to defend against.</dd>
+</dl>
+</div>
+<div class="section" id="g">
+<span id="gloss-g"></span><h1>G<a class="headerlink" href="#g" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Groups</dt>
+<dd>The word
+<tt class="docutils literal"><span class="pre">Groups</span></tt>
+has a very special meaning to Bugzilla. Bugzilla&#8217;s main security
+mechanism comes by placing users in groups, and assigning those
+groups certain privileges to view bugs in particular
+Products
+in the
+Bugzilla
+database.</dd>
+</dl>
+</div>
+<div class="section" id="j">
+<span id="gloss-j"></span><h1>J<a class="headerlink" href="#j" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>JavaScript</dt>
+<dd>JavaScript is cool, we should talk about it.</dd>
+</dl>
+</div>
+<div class="section" id="m">
+<span id="gloss-m"></span><h1>M<a class="headerlink" href="#m" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Message Transport Agent (MTA)</dt>
+<dd>A Message Transport Agent is used to control the flow of email on a system.
+The <a class="reference external" href="http://search.cpan.org/dist/Email-Send/lib/Email/Send.pm">Email::Send</a>
+Perl module, which Bugzilla uses to send email, can be configured to
+use many different underlying implementations for actually sending the
+mail using the <tt class="docutils literal"><span class="pre">mail_delivery_method</span></tt> parameter.</dd>
+<dt>MySQL</dt>
+<dd><p class="first">MySQL is one of the supported
+RDBMS for Bugzilla. MySQL
+can be downloaded from <a class="reference external" href="http://www.mysql.com">http://www.mysql.com</a>. While you
+should familiarize yourself with all of the documentation, some high
+points are:
+<a class="reference external" href="http://www.mysql.com/doc/en/Backup.html">Backup</a></p>
+<blockquote>
+<div>Methods for backing up your Bugzilla database.</div></blockquote>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://www.mysql.com/doc/en/Option_files.html">Option Files</a></dt>
+<dd>Information about how to configure MySQL using
+<tt class="file docutils literal"><span class="pre">my.cnf</span></tt>.</dd>
+<dt><a class="reference external" href="http://www.mysql.com/doc/en/Privilege_system.html">Privilege System</a></dt>
+<dd>Information about how to protect your MySQL server.</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="p">
+<span id="gloss-p"></span><h1>P<a class="headerlink" href="#p" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Perl Package Manager (PPM)</dt>
+<dd><a class="reference external" href="http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/">http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/</a></dd>
+<dt>Product</dt>
+<dd>A Product is a broad category of types of bugs, normally
+representing a single piece of software or entity. In general,
+there are several Components to a Product. A Product may define a
+group (used for security) for all bugs entered into
+its Components.</dd>
+<dt>Perl</dt>
+<dd>First written by Larry Wall, Perl is a remarkable program
+language. It has the benefits of the flexibility of an interpreted
+scripting language (such as shell script), combined with the speed
+and power of a compiled language, such as C.
+Bugzilla
+is maintained in Perl.</dd>
+</dl>
+</div>
+<div class="section" id="q">
+<span id="gloss-q"></span><h1>Q<a class="headerlink" href="#q" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>QA</dt>
+<dd><tt class="docutils literal"><span class="pre">QA</span></tt>,
+<tt class="docutils literal"><span class="pre">Q/A</span></tt>, and
+<tt class="docutils literal"><span class="pre">Q.A.</span></tt>
+are short for
+<tt class="docutils literal"><span class="pre">Quality</span> <span class="pre">Assurance</span></tt>.
+In most large software development organizations, there is a team
+devoted to ensuring the product meets minimum standards before
+shipping. This team will also generally want to track the progress of
+bugs over their life cycle, thus the need for the
+<tt class="docutils literal"><span class="pre">QA</span> <span class="pre">Contact</span></tt>
+field in a bug.</dd>
+</dl>
+</div>
+<div class="section" id="r">
+<span id="gloss-r"></span><h1>R<a class="headerlink" href="#r" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Relational DataBase Management System (RDBMS)</dt>
+<dd>A relational database management system is a database system
+that stores information in tables that are related to each other.</dd>
+<dt>Regular Expression (regexp)</dt>
+<dd>A regular expression is an expression used for pattern matching.
+<a class="reference external" href="http://perldoc.com/perl5.6/pod/perlre.html#Regular-Expressions">Documentation</a></dd>
+</dl>
+</div>
+<div class="section" id="s">
+<span id="gloss-s"></span><h1>S<a class="headerlink" href="#s" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Service</dt>
+<dd><p class="first">In Windows NT environment, a boot-time background application
+is referred to as a service. These are generally managed through the
+control panel while logged in as an account with
+<tt class="docutils literal"><span class="pre">Administrator</span></tt> level capabilities. For more
+information, consult your Windows manual or the MSKB.</p>
+<p class="last">SGML
+stands for
+<tt class="docutils literal"><span class="pre">Standard</span> <span class="pre">Generalized</span> <span class="pre">Markup</span> <span class="pre">Language</span></tt>.
+Created in the 1980&#8217;s to provide an extensible means to maintain
+documentation based upon content instead of presentation,
+SGML
+has withstood the test of time as a robust, powerful language.
+XML
+is the
+<tt class="docutils literal"><span class="pre">baby</span> <span class="pre">brother</span></tt>
+of SGML; any valid
+XML
+document it, by definition, a valid
+SGML
+document. The document you are reading is written and maintained in
+SGML,
+and is also valid
+XML
+if you modify the Document Type Definition.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="t">
+<span id="gloss-t"></span><h1>T<a class="headerlink" href="#t" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Target Milestone</dt>
+<dd>Target Milestones are Product goals. They are configurable on a
+per-Product basis. Most software development houses have a concept of
+<tt class="docutils literal"><span class="pre">milestones</span></tt>
+where the people funding a project expect certain functionality on
+certain dates. Bugzilla facilitates meeting these milestones by
+giving you the ability to declare by which milestone a bug will be
+fixed, or an enhancement will be implemented.</dd>
+<dt>Tool Command Language (TCL)</dt>
+<dd>TCL is an open source scripting language available for Windows,
+Macintosh, and Unix based systems. Bugzilla 1.0 was written in TCL but
+never released. The first release of Bugzilla was 2.0, which was when
+it was ported to perl.</dd>
+</dl>
+</div>
+<div class="section" id="z">
+<span id="gloss-z"></span><h1>Z<a class="headerlink" href="#z" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Zarro Boogs Found</dt>
+<dd><p class="first">This is just a goofy way of saying that there were no bugs
+found matching your query. When asked to explain this message,
+Terry had the following to say:</p>
+<blockquote class="last">
+<div><em>Terry Weissman</em>:
+I&#8217;ve been asked to explain this ... way back when, when
+Netscape released version 4.0 of its browser, we had a release
+party.  Naturally, there had been a big push to try and fix every
+known bug before the release. Naturally, that hadn&#8217;t actually
+happened.  (This is not unique to Netscape or to 4.0; the same thing
+has happened with every software project I&#8217;ve ever seen.)  Anyway,
+at the release party, T-shirts were handed out that said something
+like &#8220;Netscape 4.0: Zarro Boogs&#8221;. Just like the software, the
+T-shirt had no known bugs.  Uh-huh.
+So, when you query for a list of bugs, and it gets no results,
+you can think of this as a friendly reminder.  Of *course* there are
+bugs matching your query, they just aren&#8217;t in the bugsystem yet...</div></blockquote>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">0-9, high ascii</a></li>
+<li><a class="reference internal" href="#a">A</a></li>
+<li><a class="reference internal" href="#b">B</a></li>
+<li><a class="reference internal" href="#c">C</a></li>
+<li><a class="reference internal" href="#d">D</a></li>
+<li><a class="reference internal" href="#g">G</a></li>
+<li><a class="reference internal" href="#j">J</a></li>
+<li><a class="reference internal" href="#m">M</a></li>
+<li><a class="reference internal" href="#p">P</a></li>
+<li><a class="reference internal" href="#q">Q</a></li>
+<li><a class="reference internal" href="#r">R</a></li>
+<li><a class="reference internal" href="#s">S</a></li>
+<li><a class="reference internal" href="#t">T</a></li>
+<li><a class="reference internal" href="#z">Z</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/glossary.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

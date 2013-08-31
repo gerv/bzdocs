@@ -1,0 +1,1722 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Bugzilla &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-bugzilla">
+<span id="id1"></span><h1>Installing Bugzilla<a class="headerlink" href="#installing-bugzilla" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you just want to <em>use</em> Bugzilla,
+you do not need to install it. None of this chapter is relevant to
+you. Ask your Bugzilla administrator for the URL to access it from
+your web browser.</p>
+</div>
+<p>The Bugzilla server software is usually installed on Linux or
+Solaris.
+If you are installing on another OS, check <a class="reference internal" href="#os-specific"><em>OS-Specific Installation Notes</em></a>
+before you start your installation to see if there are any special
+instructions.</p>
+<p>This guide assumes that you have administrative access to the
+Bugzilla machine. It not possible to
+install and run Bugzilla itself without administrative access except
+in the very unlikely event that every single prerequisite is
+already installed.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The installation process may make your machine insecure for
+short periods of time. Make sure there is a firewall between you
+and the Internet.</p>
+</div>
+<p>You are strongly recommended to make a backup of your system
+before installing Bugzilla (and at regular intervals thereafter :-).</p>
+<p>In outline, the installation proceeds as follows:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#install-perl"><em>Install Perl</em></a>
+(5.10.1 or above)</li>
+<li><a class="reference internal" href="#install-database"><em>Install a Database Engine</em></a></li>
+<li><a class="reference internal" href="#install-webserver"><em>Install a Webserver</em></a></li>
+<li><a class="reference internal" href="#install-bzfiles"><em>Install Bugzilla</em></a></li>
+<li><a class="reference internal" href="#install-perlmodules"><em>Install Perl modules</em></a></li>
+<li><a class="reference internal" href="#install-mta"><em>Install a Mail Transfer Agent</em></a>
+(Sendmail 8.7 or above, or an MTA that is Sendmail-compatible with at least this version)</li>
+<li>Configure all of the above.</li>
+</ol>
+<div class="section" id="perl">
+<span id="install-perl"></span><h3>Perl<a class="headerlink" href="#perl" title="Permalink to this headline">¶</a></h3>
+<p>Installed Version Test:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">perl</span> <span class="o">-</span><span class="n">v</span>
+</pre></div>
+</div>
+<p>Any machine that doesn&#8217;t have Perl on it is a sad machine indeed.
+If you don&#8217;t have it and your OS doesn&#8217;t provide official packages,
+visit <a class="reference external" href="http://www.perl.org">http://www.perl.org</a>.
+Although Bugzilla runs with Perl 5.10.1,
+it&#8217;s a good idea to be using the latest stable version.</p>
+</div>
+<div class="section" id="database-engine">
+<span id="install-database"></span><h3>Database Engine<a class="headerlink" href="#database-engine" title="Permalink to this headline">¶</a></h3>
+<p>Bugzilla supports MySQL, PostgreSQL and Oracle as database servers.
+You only require one of these systems to make use of Bugzilla.</p>
+<div class="section" id="mysql">
+<span id="install-mysql"></span><h4>MySQL<a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a></h4>
+<p>Installed Version Test:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mysql</span> <span class="o">-</span><span class="n">V</span>
+</pre></div>
+</div>
+<p>If you don&#8217;t have it and your OS doesn&#8217;t provide official packages,
+visit <a class="reference external" href="http://www.mysql.com">http://www.mysql.com</a>. You need MySQL version
+5.0.15 or higher.</p>
+<p>If you install from something other than a packaging/installation
+system, such as .rpm (RPM Package Manager), .deb (Debian Package), .exe
+(Windows Executable), or .msi (Windows Installer), make sure the MySQL
+server is started when the machine boots.</p>
+</div>
+<div class="section" id="postgresql">
+<span id="install-pg"></span><h4>PostgreSQL<a class="headerlink" href="#postgresql" title="Permalink to this headline">¶</a></h4>
+<p>Installed Version Test:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">psql</span> <span class="o">-</span><span class="n">V</span>
+</pre></div>
+</div>
+<p>If you don&#8217;t have it and your OS doesn&#8217;t provide official packages,
+visit <a class="reference external" href="http://www.postgresql.org/">http://www.postgresql.org/</a>. You need PostgreSQL
+version 8.03.0000 or higher.</p>
+<p>If you install from something other than a packaging/installation
+system, such as .rpm (RPM Package Manager), .deb (Debian Package), .exe
+(Windows Executable), or .msi (Windows Installer), make sure the
+PostgreSQL server is started when the machine boots.</p>
+</div>
+<div class="section" id="oracle">
+<span id="install-oracle"></span><h4>Oracle<a class="headerlink" href="#oracle" title="Permalink to this headline">¶</a></h4>
+<p>Installed Version Test:</p>
+<div class="highlight-python"><pre>select * from v$version</pre>
+</div>
+<p>(you first have to log in into your DB)</p>
+<p>If you don&#8217;t have it and your OS doesn&#8217;t provide official packages,
+visit <a class="reference external" href="http://www.oracle.com/">http://www.oracle.com/</a>. You need Oracle
+version 10.02.0 or higher.</p>
+<p>If you install from something other than a packaging/installation
+system, such as .rpm (RPM Package Manager), .deb (Debian Package), .exe
+(Windows Executable), or .msi (Windows Installer), make sure the
+Oracle server is started when the machine boots.</p>
+</div>
+</div>
+<div class="section" id="web-server">
+<span id="install-webserver"></span><h3>Web Server<a class="headerlink" href="#web-server" title="Permalink to this headline">¶</a></h3>
+<p>Installed Version Test: view the default welcome page at
+<a class="reference external" href="http:/">http:/</a>/&lt;your-machine&gt;/</p>
+<p>You have freedom of choice here, pretty much any web server that
+is capable of running CGI
+scripts will work.
+However, we strongly recommend using the Apache web server
+(either 1.3.x or 2.x), and the installation instructions usually assume
+you are using it. If you have got Bugzilla working using another web server,
+please share your experiences with us by filing a bug in
+<a class="reference external" href="http://bugzilla.mozilla.org/enter_bug.cgi?product=Bugzilla;component=Documentation">Bugzilla Documentation</a>.</p>
+<p>If you don&#8217;t have Apache and your OS doesn&#8217;t provide official packages,
+visit <a class="reference external" href="http://httpd.apache.org/">http://httpd.apache.org/</a>.</p>
+</div>
+<div class="section" id="bugzilla">
+<span id="install-bzfiles"></span><h3>Bugzilla<a class="headerlink" href="#bugzilla" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.bugzilla.org/download/">Download a Bugzilla tarball</a>
+(or <a class="reference external" href="https://wiki.mozilla.org/Bugzilla:Bzr">check it out from Bzr</a>)
+and place it in a suitable directory, accessible by the default web server user
+(probably <tt class="docutils literal"><span class="pre">apache</span></tt> or <tt class="docutils literal"><span class="pre">www</span></tt>).
+Good locations are either directly in the web server&#8217;s document directories or
+in <tt class="file docutils literal"><span class="pre">/usr/local</span></tt> with a symbolic link to the web server&#8217;s
+document directories or an alias in the web server&#8217;s configuration.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">The default Bugzilla distribution is NOT designed to be placed
+in a <tt class="file docutils literal"><span class="pre">cgi-bin</span></tt> directory. This
+includes any directory which is configured using the
+<tt class="docutils literal"><span class="pre">ScriptAlias</span></tt> directive of Apache.</p>
+</div>
+<p>Once all the files are in a web accessible directory, make that
+directory writable by your web server&#8217;s user. This is a temporary step
+until you run the
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>
+script, which locks down your installation.</p>
+</div>
+<div class="section" id="perl-modules">
+<span id="install-perlmodules"></span><h3>Perl Modules<a class="headerlink" href="#perl-modules" title="Permalink to this headline">¶</a></h3>
+<p>Bugzilla&#8217;s installation process is based
+on a script called <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>.
+The first thing it checks is whether you have appropriate
+versions of all the required
+Perl modules. The aim of this section is to pass this check.
+When it passes, proceed to <a class="reference internal" href="#configuration"><em>Configuration</em></a>.</p>
+<p>At this point, you need to <tt class="file docutils literal"><span class="pre">su</span></tt> to root. You should
+remain as root until the end of the install. To check you have the
+required modules, run:</p>
+<div class="highlight-python"><pre>``bash#`` ./checksetup.pl --check-modules</pre>
+</div>
+<p><tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> will print out a list of the
+required and optional Perl modules, together with the versions
+(if any) installed on your machine.
+The list of required modules is reasonably long; however, you
+may already have several of them installed.</p>
+<p>The preferred way to install missing Perl modules is to use the package
+manager provided by your operating system (e.g <tt class="docutils literal"><span class="pre">rpm</span></tt> or
+<tt class="docutils literal"><span class="pre">yum</span></tt> on Linux distros, or <tt class="docutils literal"><span class="pre">ppm</span></tt> on Windows
+if using ActivePerl, see <a class="reference internal" href="#win32-perl-modules"><em>Perl Modules on Win32</em></a>).
+If some Perl modules are still missing or are too old, then we recommend
+using the <tt class="file docutils literal"><span class="pre">install-module.pl</span></tt> script (doesn&#8217;t work
+with ActivePerl on Windows). If for some reason you really need to
+install the Perl modules manually, see
+<a class="reference internal" href="modules.html#install-perlmodules-manual"><em>Manual Installation of Perl Modules</em></a>. For instance, on Unix,
+you invoke <tt class="file docutils literal"><span class="pre">install-module.pl</span></tt> as follows:</p>
+<div class="highlight-python"><pre>``bash#`` perl install-module.pl &lt;modulename&gt;</pre>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Many people complain that Perl modules will not install for
+them. Most times, the error messages complain that they are missing a
+file in
+<tt class="docutils literal"><span class="pre">&#64;INC</span></tt>.
+Virtually every time, this error is due to permissions being set too
+restrictively for you to compile Perl modules or not having the
+necessary Perl development libraries installed on your system.
+Consult your local UNIX systems administrator for help solving these
+permissions issues; if you
+<em>are</em>
+the local UNIX sysadmin, please consult the newsgroup/mailing list
+for further assistance or hire someone to help you out.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using a package-based system, and attempting to install the
+Perl modules from CPAN, you may need to install the &#8220;development&#8221; packages for
+MySQL and GD before attempting to install the related Perl modules. The names of
+these packages will vary depending on the specific distribution you are using,
+but are often called <tt class="file docutils literal"><span class="pre">&lt;packagename&gt;-devel</span></tt>.</p>
+</div>
+<p>Here is a complete list of modules and their minimum versions.
+Some modules have special installation notes, which follow.</p>
+<p>Required Perl modules:</p>
+<ol class="arabic simple">
+<li>CGI (3.50)</li>
+<li>Date::Format (2.21)</li>
+<li>DateTime (0.28)</li>
+<li>DateTime::TimeZone (0.71)</li>
+<li>DBI (1.41)</li>
+<li>DBD::mysql (4.001) if using MySQL</li>
+<li>DBD::Pg (1.45) if using PostgreSQL</li>
+<li>DBD::Oracle (1.19) if using Oracle</li>
+<li>Digest::SHA (any)</li>
+<li>Email::Send (2.00)</li>
+<li>Email::MIME (1.904)</li>
+<li>Template (2.22)</li>
+<li>URI (any)</li>
+</ol>
+<p>Optional Perl modules:</p>
+<ol class="arabic simple">
+<li>GD (1.20) for bug charting</li>
+<li>Template::Plugin::GD::Image
+(any) for Graphical Reports</li>
+<li>Chart::Lines (2.1) for bug charting</li>
+<li>GD::Graph (any) for bug charting</li>
+<li>GD::Text (any) for bug charting</li>
+<li>XML::Twig (any) for bug import/export</li>
+<li>MIME::Parser (5.406) for bug import/export</li>
+<li>LWP::UserAgent
+(any) for Automatic Update Notifications</li>
+<li>PatchReader (0.9.4) for pretty HTML view of patches</li>
+<li>Net::LDAP
+(any) for LDAP Authentication</li>
+<li>Authen::SASL
+(any) for SASL Authentication</li>
+<li>Authen::Radius
+(any) for RADIUS Authentication</li>
+<li>SOAP::Lite (0.712) for the web service interface</li>
+<li>JSON::RPC
+(any) for the JSON-RPC interface</li>
+<li>Test::Taint
+(any) for the web service interface</li>
+<li>HTML::Parser
+(3.40) for More HTML in Product/Group Descriptions</li>
+<li>HTML::Scrubber
+(any) for More HTML in Product/Group Descriptions</li>
+<li>Email::Reply
+(any) for Inbound Email</li>
+<li>TheSchwartz
+(any) for Mail Queueing</li>
+<li>Daemon::Generic
+(any) for Mail Queueing</li>
+<li>mod_perl2
+(1.999022) for mod_perl</li>
+</ol>
+</div>
+<div class="section" id="mail-transfer-agent-mta">
+<span id="install-mta"></span><h3>Mail Transfer Agent (MTA)<a class="headerlink" href="#mail-transfer-agent-mta" title="Permalink to this headline">¶</a></h3>
+<p>Bugzilla is dependent on the availability of an e-mail system for its
+user authentication and for other tasks.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is not entirely true.  It is possible to completely disable
+email sending, or to have Bugzilla store email messages in a
+file instead of sending them.  However, this is mainly intended
+for testing, as disabling or diverting email on a production
+machine would mean that users could miss important events (such
+as bug changes or the creation of new accounts).
+For more information, see the <tt class="docutils literal"><span class="pre">mail_delivery_method</span></tt> parameter
+in <a class="reference internal" href="administration.html#parameters"><em>Bugzilla Configuration</em></a>.</p>
+</div>
+<p>On Linux, any Sendmail-compatible MTA (Mail Transfer Agent) will
+suffice.  Sendmail, Postfix, qmail and Exim are examples of common
+MTAs. Sendmail is the original Unix MTA, but the others are easier to
+configure, and therefore many people replace Sendmail with Postfix or
+Exim. They are drop-in replacements, so Bugzilla will not
+distinguish between them.</p>
+<p>If you are using Sendmail, version 8.7 or higher is required.
+If you are using a Sendmail-compatible MTA, it must be congruent with
+at least version 8.7 of Sendmail.</p>
+<p>Consult the manual for the specific MTA you choose for detailed
+installation instructions. Each of these programs will have their own
+configuration files where you must configure certain parameters to
+ensure that the mail is delivered properly. They are implemented
+as services, and you should ensure that the MTA is in the auto-start
+list of services for the machine.</p>
+<p>If a simple mail sent with the command-line &#8216;mail&#8217; program
+succeeds, then Bugzilla should also be fine.</p>
+</div>
+<div class="section" id="installing-bugzilla-on-mod-perl">
+<span id="using-mod-perl-with-bugzilla"></span><h3>Installing Bugzilla on mod_perl<a class="headerlink" href="#installing-bugzilla-on-mod-perl" title="Permalink to this headline">¶</a></h3>
+<p>It is now possible to run the Bugzilla software under <tt class="docutils literal"><span class="pre">mod_perl</span></tt> on
+Apache. <tt class="docutils literal"><span class="pre">mod_perl</span></tt> has some additional requirements to that of running
+Bugzilla under <tt class="docutils literal"><span class="pre">mod_cgi</span></tt> (the standard and previous way).</p>
+<p>Bugzilla requires <tt class="docutils literal"><span class="pre">mod_perl</span></tt> to be installed, which can be
+obtained from <a class="reference external" href="http://perl.apache.org">http://perl.apache.org</a> - Bugzilla requires
+version 1.999022 (AKA 2.0.0-RC5) to be installed.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<span id="id3"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="localconfig">
+<span id="id4"></span><h3>localconfig<a class="headerlink" href="#localconfig" title="Permalink to this headline">¶</a></h3>
+<p>You should now run <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> again, this time
+without the <tt class="docutils literal"><span class="pre">--check-modules</span></tt> switch.</p>
+<div class="highlight-python"><pre>``bash#`` ./checksetup.pl</pre>
+</div>
+<p>This time, <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> should tell you that all
+the correct modules are installed and will display a message about, and
+write out a  file called, <tt class="file docutils literal"><span class="pre">localconfig</span></tt>. This file
+contains the default settings for a number of Bugzilla parameters.</p>
+<p>Load this file in your editor. The only two values you
+<em>need</em> to change are $db_driver and $db_pass,
+respectively the type of the database and the password for
+the user you will create for your database. Pick a strong
+password (for simplicity, it should not contain single quote
+characters) and put it here. $db_driver can be either &#8216;mysql&#8217;,
+&#8216;Pg&#8217;, &#8216;Oracle&#8217; or &#8216;Sqlite&#8217;.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In Oracle, <tt class="docutils literal"><span class="pre">$db_name</span></tt> should actually be
+the SID name of your database (e.g. &#8220;XE&#8221; if you are using Oracle XE).</p>
+</div>
+<p>You may need to change the value of
+<em>webservergroup</em> if your web server does not
+run in the &#8220;apache&#8221; group.  On Debian, for example, Apache runs in
+the &#8220;www-data&#8221; group.  If you are going to run Bugzilla on a
+machine where you do not have root access (such as on a shared web
+hosting account), you will need to leave
+<em>webservergroup</em> empty, ignoring the warnings
+that <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> will subsequently display
+every time it is run.</p>
+<p>The other options in the <tt class="file docutils literal"><span class="pre">localconfig</span></tt> file
+are documented by their accompanying comments. If you have a slightly
+non-standard database setup, you may wish to change one or more of
+the other &#8220;$db_*&#8221; parameters.</p>
+</div>
+<div class="section" id="database-server">
+<span id="id5"></span><h3>Database Server<a class="headerlink" href="#database-server" title="Permalink to this headline">¶</a></h3>
+<p>This section deals with configuring your database server for use
+with Bugzilla. Currently, MySQL (<a class="reference internal" href="#id6"><em>MySQL</em></a>),
+PostgreSQL (<a class="reference internal" href="#id8"><em>PostgreSQL</em></a>), Oracle (<a class="reference internal" href="#id10"><em>Oracle</em></a>)
+and SQLite (<a class="reference internal" href="#sqlite"><em>SQLite</em></a>) are available.</p>
+<div class="section" id="bugzilla-database-schema">
+<span id="database-schema"></span><h4>Bugzilla Database Schema<a class="headerlink" href="#bugzilla-database-schema" title="Permalink to this headline">¶</a></h4>
+<p>The Bugzilla database schema is available at
+<a class="reference external" href="http://www.ravenbrook.com/project/p4dti/tool/cgi/bugzilla-schema/">Ravenbrook</a>.
+This very valuable tool can generate a written description of
+the Bugzilla database schema for any version of Bugzilla. It
+can also generate a diff between two versions to help someone
+see what has changed.</p>
+</div>
+<div class="section" id="id6">
+<span id="id7"></span><h4>MySQL<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>MySQL&#8217;s default configuration is insecure.
+We highly recommend to run <tt class="file docutils literal"><span class="pre">mysql_secure_installation</span></tt>
+on Linux or the MySQL installer on Windows, and follow the instructions.
+Important points to note are:
+#. Be sure that the root account has a secure password set.
+#. Do not create an anonymous account, and if it exists, say &#8220;yes&#8221;</p>
+<blockquote>
+<div>to remove it.</div></blockquote>
+<ol class="last arabic simple">
+<li>If your web server and MySQL server are on the same machine,
+you should disable the network access.</li>
+</ol>
+</div>
+<div class="section" id="allow-large-attachments-and-many-comments">
+<span id="mysql-max-allowed-packet"></span><h5>Allow large attachments and many comments<a class="headerlink" href="#allow-large-attachments-and-many-comments" title="Permalink to this headline">¶</a></h5>
+<p>By default, MySQL will only allow you to insert things
+into the database that are smaller than 1MB. Attachments
+may be larger than this. Also, Bugzilla combines all comments
+on a single bug into one field for full-text searching, and the
+combination of all comments on a single bug could in some cases
+be larger than 1MB.</p>
+<p>To change MySQL&#8217;s default, you need to edit your MySQL
+configuration file, which is usually <tt class="file docutils literal"><span class="pre">/etc/my.cnf</span></tt>
+on Linux. We recommend that you allow at least 4MB packets by
+adding the &#8220;max_allowed_packet&#8221; parameter to your MySQL
+configuration in the &#8220;[mysqld]&#8221; section, like this:</p>
+<div class="highlight-python"><pre>[mysqld]
+# Allow packets up to 4MB
+max_allowed_packet=4M</pre>
+</div>
+</div>
+<div class="section" id="allow-small-words-in-full-text-indexes">
+<h5>Allow small words in full-text indexes<a class="headerlink" href="#allow-small-words-in-full-text-indexes" title="Permalink to this headline">¶</a></h5>
+<p>By default, words must be at least four characters in length
+in order to be indexed by MySQL&#8217;s full-text indexes. This causes
+a lot of Bugzilla specific words to be missed, including &#8220;cc&#8221;,
+&#8220;ftp&#8221; and &#8220;uri&#8221;.</p>
+<p>MySQL can be configured to index those words by setting the
+ft_min_word_len param to the minimum size of the words to index.
+This can be done by modifying the <tt class="file docutils literal"><span class="pre">/etc/my.cnf</span></tt>
+according to the example below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">mysqld</span><span class="p">]</span>
+<span class="c"># Allow small words in full-text indexes</span>
+<span class="n">ft_min_word_len</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Rebuilding the indexes can be done based on documentation found at
+<a class="reference external" href="http://www.mysql.com/doc/en/Fulltext_Fine-tuning.html">http://www.mysql.com/doc/en/Fulltext_Fine-tuning.html</a>.</p>
+</div>
+<div class="section" id="add-a-user-to-mysql">
+<span id="install-setupdatabase-adduser"></span><h5>Add a user to MySQL<a class="headerlink" href="#add-a-user-to-mysql" title="Permalink to this headline">¶</a></h5>
+<p>You need to add a new MySQL user for Bugzilla to use.
+(It&#8217;s not safe to have Bugzilla use the MySQL root account.)
+The following instructions assume the defaults in
+<tt class="file docutils literal"><span class="pre">localconfig</span></tt>; if you changed those,
+you need to modify the SQL command appropriately. You will
+need the <em>$db_pass</em> password you
+set in <tt class="file docutils literal"><span class="pre">localconfig</span></tt> in
+<a class="reference internal" href="#localconfig"><em>localconfig</em></a>.</p>
+<p>We use an SQL <strong class="command">GRANT</strong> command to create
+a <tt class="docutils literal"><span class="pre">bugs</span></tt> user. This also restricts the
+<tt class="docutils literal"><span class="pre">bugs``user</span> <span class="pre">to</span> <span class="pre">operations</span> <span class="pre">within</span> <span class="pre">a</span> <span class="pre">database</span>
+<span class="pre">called</span> <span class="pre">``bugs</span></tt>, and only allows the account
+to connect from <tt class="docutils literal"><span class="pre">localhost</span></tt>. Modify it to
+reflect your setup if you will be connecting from another
+machine or as a different user.</p>
+<p>Run the <tt class="file docutils literal"><span class="pre">mysql</span></tt> command-line client and enter:</p>
+<div class="highlight-python"><pre>``mysql&gt;`` GRANT SELECT, INSERT,
+UPDATE, DELETE, INDEX, ALTER, CREATE, LOCK TABLES,
+CREATE TEMPORARY TABLES, DROP, REFERENCES ON bugs.*
+TO bugs@localhost IDENTIFIED BY '*$db_pass*';``mysql&gt;`` FLUSH PRIVILEGES;</pre>
+</div>
+</div>
+<div class="section" id="permit-attachments-table-to-grow-beyond-4gb">
+<h5>Permit attachments table to grow beyond 4GB<a class="headerlink" href="#permit-attachments-table-to-grow-beyond-4gb" title="Permalink to this headline">¶</a></h5>
+<p>By default, MySQL will limit the size of a table to 4GB.
+This limit is present even if the underlying filesystem
+has no such limit.  To set a higher limit, follow these
+instructions.</p>
+<p>After you have completed the rest of the installation (or at least the
+database setup parts), you should run the <tt class="file docutils literal"><span class="pre">MySQL</span></tt>
+command-line client and enter the following, replacing <tt class="docutils literal"><span class="pre">$bugs_db</span></tt>
+with your Bugzilla database name (<em>bugs</em> by default):</p>
+<div class="highlight-python"><pre>``mysql&gt;`` use *$bugs_db*``mysql&gt;`` ALTER TABLE attachments
+AVG_ROW_LENGTH=1000000, MAX_ROWS=20000;</pre>
+</div>
+<p>The above command will change the limit to 20GB. Mysql will have
+to make a temporary copy of your entire table to do this. Ideally,
+you should do this when your attachments table is still small.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This does not affect Big Files, attachments that are stored directly
+on disk instead of in the database.</p>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<span id="id9"></span><h4>PostgreSQL<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="add-a-user-to-postgresql">
+<h5>Add a User to PostgreSQL<a class="headerlink" href="#add-a-user-to-postgresql" title="Permalink to this headline">¶</a></h5>
+<p>You need to add a new user to PostgreSQL for the Bugzilla
+application to use when accessing the database. The following instructions
+assume the defaults in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>; if you
+changed those, you need to modify the commands appropriately. You will
+need the <em>$db_pass</em> password you
+set in <tt class="file docutils literal"><span class="pre">localconfig</span></tt> in
+<a class="reference internal" href="#localconfig"><em>localconfig</em></a>.</p>
+<p>On most systems, to create the user in PostgreSQL, you will need to
+login as the root user, and then</p>
+<div class="highlight-python"><pre>``bash#`` su - postgres</pre>
+</div>
+<p>As the postgres user, you then need to create a new user:</p>
+<div class="highlight-python"><pre>``bash$`` createuser -U postgres -dRSP bugs</pre>
+</div>
+<p>When asked for a password, provide the password which will be set as
+<em>$db_pass</em> in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>.
+The created user will not be a superuser (-S) and will not be able to create
+new users (-R). He will only have the ability to create databases (-d).</p>
+</div>
+<div class="section" id="configure-postgresql">
+<h5>Configure PostgreSQL<a class="headerlink" href="#configure-postgresql" title="Permalink to this headline">¶</a></h5>
+<p>Now, you will need to edit <tt class="file docutils literal"><span class="pre">pg_hba.conf</span></tt> which is
+usually located in <tt class="file docutils literal"><span class="pre">/var/lib/pgsql/data/</span></tt>. In this file,
+you will need to add a new line to it as follows:</p>
+<p><tt class="docutils literal"><span class="pre">host</span>&nbsp;&nbsp; <span class="pre">all</span>&nbsp;&nbsp;&nbsp; <span class="pre">bugs</span>&nbsp;&nbsp; <span class="pre">127.0.0.1</span>&nbsp;&nbsp;&nbsp; <span class="pre">255.255.255.255</span>&nbsp; <span class="pre">md5</span></tt></p>
+<p>This means that for TCP/IP (host) connections, allow connections from
+&#8216;127.0.0.1&#8217; to &#8216;all&#8217; databases on this server from the &#8216;bugs&#8217; user, and use
+password authentication (md5) for that user.</p>
+<p>Now, you will need to restart PostgreSQL, but you will need to fully
+stop and start the server rather than just restarting due to the possibility
+of a change to <tt class="file docutils literal"><span class="pre">postgresql.conf</span></tt>. After the server has
+restarted, you will need to edit <tt class="file docutils literal"><span class="pre">localconfig</span></tt>, finding
+the <tt class="docutils literal"><span class="pre">$db_driver</span></tt> variable and setting it to
+<tt class="docutils literal"><span class="pre">Pg</span></tt> and changing the password in <tt class="docutils literal"><span class="pre">$db_pass</span></tt>
+to the one you picked previously, while setting up the account.</p>
+</div>
+</div>
+<div class="section" id="id10">
+<span id="id11"></span><h4>Oracle<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="create-a-new-tablespace">
+<h5>Create a New Tablespace<a class="headerlink" href="#create-a-new-tablespace" title="Permalink to this headline">¶</a></h5>
+<p>You can use the existing tablespace or create a new one for Bugzilla.
+To create a new tablespace, run the following command:</p>
+<div class="highlight-python"><pre>CREATE TABLESPACE bugs
+DATAFILE '*$path_to_datafile*' SIZE 500M
+AUTOEXTEND ON NEXT 30M MAXSIZE UNLIMITED</pre>
+</div>
+<p>Here, the name of the tablespace is &#8216;bugs&#8217;, but you can
+choose another name. <em>$path_to_datafile</em> is
+the path to the file containing your database, for instance
+<tt class="file docutils literal"><span class="pre">/u01/oradata/bugzilla.dbf</span></tt>.
+The initial size of the database file is set in this example to 500 Mb,
+with an increment of 30 Mb everytime we reach the size limit of the file.</p>
+</div>
+<div class="section" id="add-a-user-to-oracle">
+<h5>Add a User to Oracle<a class="headerlink" href="#add-a-user-to-oracle" title="Permalink to this headline">¶</a></h5>
+<p>The user name and password must match what you set in
+<tt class="file docutils literal"><span class="pre">localconfig</span></tt> (<tt class="docutils literal"><span class="pre">$db_user</span></tt>
+and <tt class="docutils literal"><span class="pre">$db_pass</span></tt>, respectively). Here, we assume that
+the user name is &#8216;bugs&#8217; and the tablespace name is the same
+as above.</p>
+<div class="highlight-python"><pre>CREATE USER bugs
+IDENTIFIED BY "*$db_pass*"
+DEFAULT TABLESPACE bugs
+TEMPORARY TABLESPACE TEMP
+PROFILE DEFAULT;
+-- GRANT/REVOKE ROLE PRIVILEGES
+GRANT CONNECT TO bugs;
+GRANT RESOURCE TO bugs;
+-- GRANT/REVOKE SYSTEM PRIVILEGES
+GRANT UNLIMITED TABLESPACE TO bugs;
+GRANT EXECUTE ON CTXSYS.CTX_DDL TO bugs;</pre>
+</div>
+</div>
+<div class="section" id="configure-the-web-server">
+<h5>Configure the Web Server<a class="headerlink" href="#configure-the-web-server" title="Permalink to this headline">¶</a></h5>
+<p>If you use Apache, append these lines to <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt>
+to set ORACLE_HOME and LD_LIBRARY_PATH. For instance:</p>
+<div class="highlight-python"><pre>SetEnv ORACLE_HOME /u01/app/oracle/product/10.2.0/
+SetEnv LD_LIBRARY_PATH /u01/app/oracle/product/10.2.0/lib/</pre>
+</div>
+<p>When this is done, restart your web server.</p>
+</div>
+</div>
+<div class="section" id="sqlite">
+<span id="id12"></span><h4>SQLite<a class="headerlink" href="#sqlite" title="Permalink to this headline">¶</a></h4>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">Due to SQLite&#8217;s <a class="reference external" href="http://sqlite.org/faq.html#q5">concurrency
+limitations</a> we recommend SQLite only for small and development
+Bugzilla installations.</p>
+</div>
+<p>No special configuration is required to run Bugzilla on SQLite.
+The database will be stored in <tt class="file docutils literal"><span class="pre">data/db/$db_name</span></tt>,
+where <tt class="docutils literal"><span class="pre">$db_name</span></tt> is the database name defined
+in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="checksetup-pl">
+<h3>checksetup.pl<a class="headerlink" href="#checksetup-pl" title="Permalink to this headline">¶</a></h3>
+<p>Next, rerun <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>. It reconfirms
+that all the modules are present, and notices the altered
+localconfig file, which it assumes you have edited to your
+satisfaction. It compiles the UI templates,
+connects to the database using the &#8216;bugs&#8217;
+user you created and the password you defined, and creates the
+&#8216;bugs&#8217; database and the tables therein.</p>
+<p>After that, it asks for details of an administrator account. Bugzilla
+can have multiple administrators - you can create more later - but
+it needs one to start off with.
+Enter the email address of an administrator, his or her full name,
+and a suitable Bugzilla password.</p>
+<p><tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> will then finish. You may rerun
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> at any time if you wish.</p>
+</div>
+<div class="section" id="http">
+<span id="id13"></span><h3>Web server<a class="headerlink" href="#http" title="Permalink to this headline">¶</a></h3>
+<p>Configure your web server according to the instructions in the
+appropriate section. (If it makes a difference in your choice,
+the Bugzilla Team recommends Apache.) To check whether your web server
+is correctly configured, try to access <tt class="file docutils literal"><span class="pre">testagent.cgi</span></tt>
+from your web server. If &#8220;OK&#8221; is displayed, then your configuration
+is successful. Regardless of which web server
+you are using, however, ensure that sensitive information is
+not remotely available by properly applying the access controls in
+<a class="reference internal" href="security.html#security-webserver-access"><em>Disabling Remote Access to Bugzilla Configuration Files</em></a>. You can run
+<tt class="file docutils literal"><span class="pre">testserver.pl</span></tt> to check if your web server serves
+Bugzilla files as expected.</p>
+<div class="section" id="bugzilla-using-apache">
+<span id="http-apache"></span><h4>Bugzilla using Apache<a class="headerlink" href="#bugzilla-using-apache" title="Permalink to this headline">¶</a></h4>
+<p>You have two options for running Bugzilla under Apache -
+<a class="reference internal" href="#http-apache-mod-cgi"><em>mod_cgi</em></a> (the default) and
+<a class="reference internal" href="#http-apache-mod-perl"><em>mod_perl</em></a> (new in Bugzilla
+2.23)</p>
+<div class="section" id="apache-httpd-with-mod-cgi">
+<span id="http-apache-mod-cgi"></span><h5>Apache <em>httpd</em> with mod_cgi<a class="headerlink" href="#apache-httpd-with-mod-cgi" title="Permalink to this headline">¶</a></h5>
+<p>To configure your Apache web server to work with Bugzilla while using
+mod_cgi, do the following:</p>
+<ol class="arabic">
+<li><p class="first">Load <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt> in your editor.
+In Fedora and Red Hat Linux, this file is found in
+<tt class="file docutils literal"><span class="pre">/etc/httpd/conf</span></tt>.</p>
+</li>
+<li><p class="first">Apache uses <tt class="docutils literal"><span class="pre">&lt;Directory&gt;</span></tt>
+directives to permit fine-grained permission setting. Add the
+following lines to a directive that applies to the location
+of your Bugzilla installation. (If such a section does not
+exist, you&#8217;ll want to add one.) In this example, Bugzilla has
+been installed at
+<tt class="file docutils literal"><span class="pre">/var/www/html/bugzilla</span></tt>.</p>
+<div class="highlight-python"><pre>&lt;Directory /var/www/html/bugzilla&gt;
+AddHandler cgi-script .cgi
+Options +ExecCGI
+DirectoryIndex index.cgi index.html
+AllowOverride Limit FileInfo Indexes Options
+&lt;/Directory&gt;</pre>
+</div>
+<p>These instructions: allow apache to run .cgi files found
+within the bugzilla directory; instructs the server to look
+for a file called <tt class="file docutils literal"><span class="pre">index.cgi</span></tt> or, if not
+found, <tt class="file docutils literal"><span class="pre">index.html</span></tt> if someone
+only types the directory name into the browser; and allows
+Bugzilla&#8217;s <tt class="file docutils literal"><span class="pre">.htaccess</span></tt> files to override
+some global permissions.
+.. note:: It is possible to make these changes globally, or to the</p>
+<blockquote>
+<div><p>directive controlling Bugzilla&#8217;s parent directory (e.g.
+<tt class="docutils literal"><span class="pre">&lt;Directory</span> <span class="pre">/var/www/html/&gt;</span></tt>).
+Such changes would also apply to the Bugzilla directory...
+but they would also apply to many other places where they
+may or may not be appropriate. In most cases, including
+this one, it is better to be as restrictive as possible
+when granting extra access.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Windows, you may have to also add the
+<tt class="docutils literal"><span class="pre">ScriptInterpreterSource</span> <span class="pre">Registry-Strict</span></tt>
+line, see <a class="reference internal" href="#win32-http"><em>Windows specific notes</em></a>.</p>
+</div>
+</li>
+<li><p class="first"><tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> can set tighter permissions
+on Bugzilla&#8217;s files and directories if it knows what group the
+web server runs as. Find the <tt class="docutils literal"><span class="pre">Group</span></tt>
+line in <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt>, place the value found
+there in the <em>$webservergroup</em> variable
+in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>, then rerun
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>.</p>
+</li>
+<li><p class="first">Optional: If Bugzilla does not actually reside in the webspace
+directory, but instead has been symbolically linked there, you
+will need to add the following to the
+<tt class="docutils literal"><span class="pre">Options</span></tt> line of the Bugzilla
+<tt class="docutils literal"><span class="pre">&lt;Directory&gt;</span></tt> directive
+(the same one as in the step above):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">+</span><span class="n">FollowSymLinks</span>
+</pre></div>
+</div>
+<p>Without this directive, Apache will not follow symbolic links
+to places outside its own directory structure, and you will be
+unable to run Bugzilla.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="apache-httpd-with-mod-perl">
+<span id="http-apache-mod-perl"></span><h5>Apache <em>httpd</em> with mod_perl<a class="headerlink" href="#apache-httpd-with-mod-perl" title="Permalink to this headline">¶</a></h5>
+<p>Some configuration is required to make Bugzilla work with Apache
+and mod_perl</p>
+<ol class="arabic">
+<li><p class="first">Load <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt> in your editor.
+In Fedora and Red Hat Linux, this file is found in
+<tt class="file docutils literal"><span class="pre">/etc/httpd/conf</span></tt>.</p>
+</li>
+<li><p class="first">Add the following information to your httpd.conf file, substituting
+where appropriate with your own local paths.
+.. note:: This should be used instead of the &lt;Directory&gt; block</p>
+<blockquote>
+<div><p>shown above. This should also be above any other <tt class="docutils literal"><span class="pre">mod_perl</span></tt>
+directives within the <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt> and must be specified
+in the order as below.</p>
+</div></blockquote>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You should also ensure that you have disabled <tt class="docutils literal"><span class="pre">KeepAlive</span></tt>
+support in your Apache install when utilizing Bugzilla under mod_perl</p>
+</div>
+<dl class="docutils">
+<dt>::</dt>
+<dd><p class="first last">PerlSwitches -w -T
+PerlConfigRequire /var/www/html/bugzilla/mod_perl.pl</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> can set tighter permissions
+on Bugzilla&#8217;s files and directories if it knows what group the
+web server runs as. Find the <tt class="docutils literal"><span class="pre">Group</span></tt>
+line in <tt class="file docutils literal"><span class="pre">httpd.conf</span></tt>, place the value found
+there in the <em>$webservergroup</em> variable
+in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>, then rerun
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>.</p>
+</li>
+</ol>
+<p>On restarting Apache, Bugzilla should now be running within the
+mod_perl environment. Please ensure you have run checksetup.pl to set
+permissions before you restart Apache.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Please bear the following points in mind when looking at using
+Bugzilla under mod_perl:
+- mod_perl support in Bugzilla can take up a HUGE amount of RAM. You could be</p>
+<blockquote>
+<div>looking at 30MB per httpd child, easily. Basically, you just need a lot of RAM.
+The more RAM you can get, the better. mod_perl is basically trading RAM for
+speed. At least 2GB total system RAM is recommended for running Bugzilla under
+mod_perl.</div></blockquote>
+<ul class="last simple">
+<li>Under mod_perl, you have to restart Apache if you make any manual change to
+any Bugzilla file. You can&#8217;t just reload&#8211;you have to actually
+<em>restart</em> the server (as in make sure it stops and starts
+again). You <em>can</em> change localconfig and the params file
+manually, if you want, because those are re-read every time you load a page.</li>
+<li>You must run in Apache&#8217;s Prefork MPM (this is the default). The Worker MPM
+may not work&#8211;we haven&#8217;t tested Bugzilla&#8217;s mod_perl support under threads.
+(And, in fact, we&#8217;re fairly sure it <em>won&#8217;t</em> work.)</li>
+<li>Bugzilla generally expects to be the only mod_perl application running on
+your entire server. It may or may not work if there are other applications also
+running under mod_perl. It does try its best to play nice with other mod_perl
+applications, but it still may have conflicts.</li>
+<li>It is recommended that you have one Bugzilla instance running under mod_perl
+on your server. Bugzilla has not been tested with more than one instance running.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="microsoft-internet-information-services">
+<span id="http-iis"></span><h4>Microsoft <em>Internet Information Services</em><a class="headerlink" href="#microsoft-internet-information-services" title="Permalink to this headline">¶</a></h4>
+<p>If you are running Bugzilla on Windows and choose to use
+Microsoft&#8217;s <em>Internet Information Services</em>
+or <em>Personal Web Server</em> you will need
+to perform a number of other configuration steps as explained below.
+You may also want to refer to the following Microsoft Knowledge
+Base articles:
+<a class="reference external" href="http://support.microsoft.com/default.aspx?scid=kb;en-us;245225">245225</a>
+<tt class="docutils literal"><span class="pre">HOW</span> <span class="pre">TO:</span> <span class="pre">Configure</span> <span class="pre">and</span> <span class="pre">Test</span> <span class="pre">a</span> <span class="pre">PERL</span> <span class="pre">Script</span> <span class="pre">with</span> <span class="pre">IIS</span> <span class="pre">4.0,</span>
+<span class="pre">5.0,</span> <span class="pre">and</span> <span class="pre">5.1</span></tt> (for <em>Internet Information
+Services</em>) and
+<a class="reference external" href="http://support.microsoft.com/default.aspx?scid=kb;en-us;231998">231998</a>
+<tt class="docutils literal"><span class="pre">HOW</span> <span class="pre">TO:</span> <span class="pre">FP2000:</span> <span class="pre">How</span> <span class="pre">to</span> <span class="pre">Use</span> <span class="pre">Perl</span> <span class="pre">with</span> <span class="pre">Microsoft</span> <span class="pre">Personal</span> <span class="pre">Web</span>
+<span class="pre">Server</span> <span class="pre">on</span> <span class="pre">Windows</span> <span class="pre">95/98</span></tt> (for <em>Personal Web
+Server</em>).</p>
+<p>You will need to create a virtual directory for the Bugzilla
+install.  Put the Bugzilla files in a directory that is named
+something <em>other</em> than what you want your
+end-users accessing.  That is, if you want your users to access
+your Bugzilla installation through
+<tt class="docutils literal"><span class="pre">http://&lt;yourdomainname&gt;/Bugzilla</span></tt>, then do
+<em>not</em> put your Bugzilla files in a directory
+named <tt class="docutils literal"><span class="pre">Bugzilla</span></tt>.  Instead, place them in a different
+location, and then use the IIS Administration tool to create a
+Virtual Directory named &#8220;Bugzilla&#8221; that acts as an alias for the
+actual location of the files.  When creating that virtual directory,
+make sure you add the <tt class="docutils literal"><span class="pre">Execute</span> <span class="pre">(such</span> <span class="pre">as</span> <span class="pre">ISAPI</span> <span class="pre">applications</span> <span class="pre">or</span>
+<span class="pre">CGI)</span></tt> access permission.</p>
+<p>You will also need to tell IIS how to handle Bugzilla&#8217;s
+.cgi files. Using the IIS Administration tool again, open up
+the properties for the new virtual directory and select the
+Configuration option to access the Script Mappings. Create an
+entry mapping .cgi to:</p>
+<div class="highlight-python"><pre>&lt;full path to perl.exe &gt;\\perl.exe -x&lt;full path to Bugzilla&gt; -wT "%s" %s</pre>
+</div>
+<p>For example:</p>
+<div class="highlight-python"><pre>c:\\perl\\bin\\perl.exe -xc:\\bugzilla -wT "%s" %s</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ActiveState install may have already created an entry for
+.pl files that is limited to <tt class="docutils literal"><span class="pre">GET,HEAD,POST</span></tt>. If
+so, this mapping should be <em>removed</em> as
+Bugzilla&#8217;s .pl files are not designed to be run via a web server.</p>
+</div>
+<p>IIS will also need to know that the index.cgi should be treated
+as a default document.  On the Documents tab page of the virtual
+directory properties, you need to add index.cgi as a default
+document type.  If you  wish, you may remove the other default
+document types for this particular virtual directory, since Bugzilla
+doesn&#8217;t use any of them.</p>
+<p>Also, and this can&#8217;t be stressed enough, make sure that files
+such as <tt class="file docutils literal"><span class="pre">localconfig</span></tt> and your
+<tt class="file docutils literal"><span class="pre">data</span></tt> directory are
+secured as described in <a class="reference internal" href="security.html#security-webserver-access"><em>Disabling Remote Access to Bugzilla Configuration Files</em></a>.</p>
+</div>
+</div>
+<div class="section" id="install-config-bugzilla">
+<span id="id16"></span><h3>Bugzilla<a class="headerlink" href="#install-config-bugzilla" title="Permalink to this headline">¶</a></h3>
+<p>Your Bugzilla should now be working. Access
+<tt class="file docutils literal"><span class="pre">http://&lt;your-bugzilla-server&gt;/</span></tt> -
+you should see the Bugzilla
+front page. If not, consult the Troubleshooting section,
+<a class="reference internal" href="troubleshooting.html#troubleshooting"><em>Troubleshooting</em></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The URL above may be incorrect if you installed Bugzilla into a
+subdirectory or used a symbolic link from your web site root to
+the Bugzilla directory.</p>
+</div>
+<p>Log in with the administrator account you defined in the last
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> run. You should go through
+the Parameters page and see if there are any you wish to change.
+They key parameters are documented in <a class="reference internal" href="administration.html#parameters"><em>Bugzilla Configuration</em></a>;
+you should certainly alter
+<strong class="command">maintainer</strong> and <strong class="command">urlbase</strong>;
+you may also want to alter
+<strong class="command">cookiepath</strong> or <strong class="command">requirelogin</strong>.</p>
+<p>Bugzilla has several optional features which require extra
+configuration. You can read about those in
+<a class="reference internal" href="#extraconfig"><em>Optional Additional Configuration</em></a>.</p>
+</div>
+</div>
+<div class="section" id="optional-additional-configuration">
+<span id="extraconfig"></span><h2>Optional Additional Configuration<a class="headerlink" href="#optional-additional-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Bugzilla has a number of optional features. This section describes how
+to configure or enable them.</p>
+<div class="section" id="bug-graphs">
+<h3>Bug Graphs<a class="headerlink" href="#bug-graphs" title="Permalink to this headline">¶</a></h3>
+<p>If you have installed the necessary Perl modules you
+can start collecting statistics for the nifty Bugzilla
+graphs.</p>
+<div class="highlight-python"><pre>``bash#`` :command:`crontab -e`</pre>
+</div>
+<p>This should bring up the crontab file in your editor.
+Add a cron entry like this to run
+<tt class="file docutils literal"><span class="pre">collectstats.pl</span></tt>
+daily at 5 after midnight:</p>
+<div class="highlight-python"><pre>5 0 * * * cd &lt;your-bugzilla-directory&gt; &amp;&amp; ./collectstats.pl</pre>
+</div>
+<p>After two days have passed you&#8217;ll be able to view bug graphs from
+the Reports page.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Windows does not have &#8216;cron&#8217;, but it does have the Task
+Scheduler, which performs the same duties. There are also
+third-party tools that can be used to implement cron, such as
+<a class="reference external" href="http://www.nncron.ru/">nncron</a>.</p>
+</div>
+</div>
+<div class="section" id="the-whining-cron">
+<span id="installation-whining-cron"></span><h3>The Whining Cron<a class="headerlink" href="#the-whining-cron" title="Permalink to this headline">¶</a></h3>
+<p>What good are
+bugs if they&#8217;re not annoying? To help make them more so you
+can set up Bugzilla&#8217;s automatic whining system to complain at engineers
+which leave their bugs in the CONFIRMED state without triaging them.</p>
+<p>This can be done by adding the following command as a daily
+crontab entry, in the same manner as explained above for bug
+graphs. This example runs it at 12.55am.</p>
+<div class="highlight-python"><pre>55 0 * * * cd &lt;your-bugzilla-directory&gt; &amp;&amp; ./whineatnews.pl</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Windows does not have &#8216;cron&#8217;, but it does have the Task
+Scheduler, which performs the same duties. There are also
+third-party tools that can be used to implement cron, such as
+<a class="reference external" href="http://www.nncron.ru/">nncron</a>.</p>
+</div>
+</div>
+<div class="section" id="whining">
+<span id="installation-whining"></span><h3>Whining<a class="headerlink" href="#whining" title="Permalink to this headline">¶</a></h3>
+<p>As of Bugzilla 2.20, users can configure Bugzilla to regularly annoy
+them at regular intervals, by having Bugzilla execute saved searches
+at certain times and emailing the results to the user.  This is known
+as &#8220;Whining&#8221;.  The process of configuring Whining is described
+in <a class="reference internal" href="using.html#whining"><em>Whining</em></a>, but for it to work a Perl script must be
+executed at regular intervals.</p>
+<p>This can be done by adding the following command as a daily
+crontab entry, in the same manner as explained above for bug
+graphs. This example runs it every 15 minutes.</p>
+<div class="highlight-python"><pre>*/15 * * * * cd &lt;your-bugzilla-directory&gt; &amp;&amp; ./whine.pl</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Whines can be executed as often as every 15 minutes, so if you specify
+longer intervals between executions of whine.pl, some users may not
+be whined at as often as they would expect.  Depending on the person,
+this can either be a very Good Thing or a very Bad Thing.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Windows does not have &#8216;cron&#8217;, but it does have the Task
+Scheduler, which performs the same duties. There are also
+third-party tools that can be used to implement cron, such as
+<a class="reference external" href="http://www.nncron.ru/">nncron</a>.</p>
+</div>
+</div>
+<div class="section" id="serving-alternate-formats-with-the-right-mime-type">
+<span id="apache-addtype"></span><h3>Serving Alternate Formats with the right MIME type<a class="headerlink" href="#serving-alternate-formats-with-the-right-mime-type" title="Permalink to this headline">¶</a></h3>
+<p>Some Bugzilla pages have alternate formats, other than just plain
+HTML. In particular, a few Bugzilla pages can
+output their contents as either XUL (a special
+Mozilla format, that looks like a program GUI)
+or RDF (a type of structured XML
+that can be read by various programs).</p>
+<p>In order for your users to see these pages correctly, Apache must
+send them with the right MIME type. To do this,
+add the following lines to your Apache configuration, either in the
+<tt class="docutils literal"><span class="pre">&lt;VirtualHost&gt;</span></tt> section for your
+Bugzilla, or in the <tt class="docutils literal"><span class="pre">&lt;Directory&gt;</span></tt>
+section for your Bugzilla:</p>
+<div class="highlight-python"><pre>AddType application/vnd.mozilla.xul+xml .xul
+AddType application/rdf+xml .rdf</pre>
+</div>
+</div>
+</div>
+<div class="section" id="multiple-bugzilla-databases-with-a-single-installation">
+<span id="multiple-bz-dbs"></span><h2>Multiple Bugzilla databases with a single installation<a class="headerlink" href="#multiple-bugzilla-databases-with-a-single-installation" title="Permalink to this headline">¶</a></h2>
+<p>The previous instructions referred to a standard installation, with
+one unique Bugzilla database. However, you may want to host several
+distinct installations, without having several copies of the code. This is
+possible by using the PROJECT environment variable. When accessed,
+Bugzilla checks for the existence of this variable, and if present, uses
+its value to check for an alternative configuration file named
+<tt class="file docutils literal"><span class="pre">localconfig.&lt;PROJECT&gt;</span></tt> in the same location as
+the default one (<tt class="file docutils literal"><span class="pre">localconfig</span></tt>). It also checks for
+customized templates in a directory named
+<tt class="file docutils literal"><span class="pre">&lt;PROJECT&gt;</span></tt> in the same location as the
+default one (<tt class="file docutils literal"><span class="pre">template/&lt;langcode&gt;</span></tt>). By default
+this is <tt class="file docutils literal"><span class="pre">template/en/default</span></tt> so PROJECT&#8217;s templates
+would be located at <tt class="file docutils literal"><span class="pre">template/en/PROJECT</span></tt>.</p>
+<p>To set up an alternate installation, just export PROJECT=foo before
+running <strong class="command">checksetup.pl</strong> for the first time. It will
+result in a file called <tt class="file docutils literal"><span class="pre">localconfig.foo</span></tt> instead of
+<tt class="file docutils literal"><span class="pre">localconfig</span></tt>. Edit this file as described above, with
+reference to a new database, and re-run <strong class="command">checksetup.pl</strong>
+to populate it. That&#8217;s all.</p>
+<p>Now you have to configure the web server to pass this environment
+variable when accessed via an alternate URL, such as virtual host for
+instance. The following is an example of how you could do it in Apache,
+other Webservers may differ.</p>
+<div class="highlight-python"><pre>&lt;VirtualHost 212.85.153.228:80&gt;
+ServerName foo.bar.baz
+SetEnv PROJECT foo
+Alias /bugzilla /var/www/bugzilla
+&lt;/VirtualHost&gt;</pre>
+</div>
+<p>Don&#8217;t forget to also export this variable before accessing Bugzilla
+by other means, such as cron tasks for instance.</p>
+</div>
+<div class="section" id="os-specific-installation-notes">
+<span id="os-specific"></span><h2>OS-Specific Installation Notes<a class="headerlink" href="#os-specific-installation-notes" title="Permalink to this headline">¶</a></h2>
+<p>Many aspects of the Bugzilla installation can be affected by the
+operating system you choose to install it on. Sometimes it can be made
+easier and others more difficult. This section will attempt to help you
+understand both the difficulties of running on specific operating systems
+and the utilities available to make it easier.</p>
+<p>If you have anything to add or notes for an operating system not covered,
+please file a bug in <a class="reference external" href="http://bugzilla.mozilla.org/enter_bug.cgi?product=Bugzilla;component=Documentation">Bugzilla Documentation</a>.</p>
+<div class="section" id="microsoft-windows">
+<span id="os-win32"></span><h3>Microsoft Windows<a class="headerlink" href="#microsoft-windows" title="Permalink to this headline">¶</a></h3>
+<p>Making Bugzilla work on Windows is more difficult than making it
+work on Unix.  For that reason, we still recommend doing so on a Unix
+based system such as GNU/Linux.  That said, if you do want to get
+Bugzilla running on Windows, you will need to make the following
+adjustments. A detailed step-by-step
+<a class="reference external" href="https://wiki.mozilla.org/Bugzilla:Win32Install">installation guide for Windows</a> is also available
+if you need more help with your installation.</p>
+<div class="section" id="win32-perl">
+<span id="id20"></span><h4>Win32 Perl<a class="headerlink" href="#win32-perl" title="Permalink to this headline">¶</a></h4>
+<p>Perl for Windows can be obtained from
+<a class="reference external" href="http://www.activestate.com/">ActiveState</a>.
+You should be able to find a compiled binary at <a class="reference external" href="http://aspn.activestate.com/ASPN/Downloads/ActivePerl/">http://aspn.activestate.com/ASPN/Downloads/ActivePerl/</a>.
+The following instructions assume that you are using version
+5.10.1 of ActiveState.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These instructions are for 32-bit versions of Windows. If you are
+using a 64-bit version of Windows, you will need to install 32-bit
+Perl in order to install the 32-bit modules as described below.</p>
+</div>
+</div>
+<div class="section" id="perl-modules-on-win32">
+<span id="win32-perl-modules"></span><h4>Perl Modules on Win32<a class="headerlink" href="#perl-modules-on-win32" title="Permalink to this headline">¶</a></h4>
+<p>Bugzilla on Windows requires the same perl modules found in
+<a class="reference internal" href="#install-perlmodules"><em>Perl Modules</em></a>. The main difference is that
+windows uses PPM instead
+of CPAN. ActiveState provides a GUI to manage Perl modules. We highly
+recommend that you use it. If you prefer to use ppm from the
+command-line, type:</p>
+<div class="highlight-python"><pre>C:\\perl&gt; :command:`ppm install &lt;module name&gt;`</pre>
+</div>
+<p>If you are using Perl 5.10.1, the best source for the Windows PPM modules
+needed for Bugzilla is probably the theory58S website, which you can add
+to your list of repositories as follows:</p>
+<div class="highlight-python"><pre>:command:`ppm repo add theory58S http://cpan.uwinnipeg.ca/PPMPackages/10xx/`</pre>
+</div>
+<p>If you are using Perl 5.12 or newer, you no longer need to add
+this repository. All modules you need are already available from
+the ActiveState repository.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The PPM repository stores modules in &#8216;packages&#8217; that may have
+a slightly different name than the module.  If retrieving these
+modules from there, you will need to pay attention to the information
+provided when you run <strong class="command">checksetup.pl</strong> as it will
+tell you what package you&#8217;ll need to install.</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you are behind a corporate firewall, you will need to let the
+ActiveState PPM utility know how to get through it to access
+the repositories by setting the HTTP_proxy system environmental
+variable. For more information on setting that variable, see
+the ActiveState documentation.</p>
+</div>
+</div>
+<div class="section" id="serving-the-web-pages">
+<span id="win32-http"></span><h4>Serving the web pages<a class="headerlink" href="#serving-the-web-pages" title="Permalink to this headline">¶</a></h4>
+<p>As is the case on Unix based systems, any web server should
+be able to handle Bugzilla; however, the Bugzilla Team still
+recommends Apache whenever asked. No matter what web server
+you choose, be sure to pay attention to the security notes
+in <a class="reference internal" href="security.html#security-webserver-access"><em>Disabling Remote Access to Bugzilla Configuration Files</em></a>. More
+information on configuring specific web servers can be found
+in <a class="reference internal" href="#http"><em>Web server</em></a>.</p>
+</div>
+<div class="section" id="sending-email">
+<span id="win32-email"></span><h4>Sending Email<a class="headerlink" href="#sending-email" title="Permalink to this headline">¶</a></h4>
+<p>To enable Bugzilla to send email on Windows, the server running the
+Bugzilla code must be able to connect to, or act as, an SMTP server.</p>
+</div>
+</div>
+<div class="section" id="mac-os-x">
+<span id="os-macosx"></span><h3><em>Mac OS X</em><a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>Making Bugzilla work on Mac OS X requires the following
+adjustments.</p>
+<div class="section" id="sendmail">
+<span id="macosx-sendmail"></span><h4>Sendmail<a class="headerlink" href="#sendmail" title="Permalink to this headline">¶</a></h4>
+<p>In Mac OS X 10.3 and later,
+<a class="reference external" href="http://www.postfix.org/">Postfix</a>
+is used as the built-in email server.  Postfix provides an executable
+that mimics sendmail enough to fool Bugzilla, as long as Bugzilla can
+find it. Bugzilla is able to find the fake sendmail executable without
+any assistance.</p>
+</div>
+<div class="section" id="libraries-perl-modules-on-mac-os-x">
+<span id="macosx-libraries"></span><h4>Libraries &amp; Perl Modules on Mac OS X<a class="headerlink" href="#libraries-perl-modules-on-mac-os-x" title="Permalink to this headline">¶</a></h4>
+<p>Apple does not include the GD library with Mac OS X. Bugzilla
+needs this for bug graphs.</p>
+<p>You can use MacPorts (<a class="reference external" href="http://www.macports.org/">http://www.macports.org/</a>)
+or Fink (<a class="reference external" href="http://sourceforge.net/projects/fink/">http://sourceforge.net/projects/fink/</a>), both
+of which are similar in nature to the CPAN installer, but install
+common unix programs.</p>
+<p>Follow the instructions for setting up MacPorts or Fink.
+Once you have one installed, you&#8217;ll want to use it to install the
+<tt class="file docutils literal"><span class="pre">gd2</span></tt> package.</p>
+<p>Fink will prompt you for a number of dependencies, type &#8216;y&#8217; and hit
+enter to install all of the dependencies and then watch it work. You will
+then be able to use CPAN to
+install the GD Perl module.</p>
+<p>Also available via MacPorts and Fink is
+<tt class="file docutils literal"><span class="pre">expat</span></tt>. After installing the expat package, you
+will be able to install XML::Parser using CPAN. If you use fink, there
+is one caveat. Unlike recent versions of
+the GD module, XML::Parser doesn&#8217;t prompt for the location of the
+required libraries. When using CPAN, you will need to use the following
+command sequence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># perl -MCPAN -e&#39;look XML::Parser&#39;</span>
+<span class="c"># perl Makefile.PL EXPATLIBPATH=/sw/lib EXPATINCPATH=/sw/include</span>
+<span class="c"># make; make test; make install</span>
+<span class="c"># exit</span>
+</pre></div>
+</div>
+<p>The <strong class="command">look</strong> command will download the module and spawn
+a new shell with the extracted files as the current working directory.</p>
+<p>You should watch the output from these <strong class="command">make</strong> commands,
+especially <tt class="docutils literal"><span class="pre">make</span> <span class="pre">test</span></tt> as errors may prevent
+XML::Parser from functioning correctly with Bugzilla.</p>
+<p>The <strong class="command">exit</strong> command will return you to your original shell.</p>
+</div>
+</div>
+<div class="section" id="linux-distributions">
+<span id="os-linux"></span><h3>Linux Distributions<a class="headerlink" href="#linux-distributions" title="Permalink to this headline">¶</a></h3>
+<p>Many Linux distributions include Bugzilla and its
+dependencies in their native package management systems.
+Installing Bugzilla with root access on any Linux system
+should be as simple as finding the Bugzilla package in the
+package management application and installing it using the
+normal command syntax. Several distributions also perform
+the proper web server configuration automatically on installation.</p>
+<p>Please consult the documentation of your Linux
+distribution for instructions on how to install packages,
+or for specific instructions on installing Bugzilla with
+native package management tools. There is also a
+<a class="reference external" href="http://wiki.mozilla.org/Bugzilla:Linux_Distro_Installation">Bugzilla Wiki Page</a> for distro-specific installation
+notes.</p>
+</div>
+</div>
+<div class="section" id="unix-non-root-installation-notes">
+<span id="nonroot"></span><h2>UNIX (non-root) Installation Notes<a class="headerlink" href="#unix-non-root-installation-notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>If you are running a *NIX OS as non-root, either due
+to lack of access (web hosts, for example) or for security
+reasons, this will detail how to install Bugzilla on such
+a setup. It is recommended that you read through the
+<a class="reference internal" href="#installation"><em>Installation</em></a>
+first to get an idea on the installation steps required.
+(These notes will reference to steps in that guide.)</p>
+</div>
+<div class="section" id="id21">
+<h3>MySQL<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<p>You may have MySQL installed as root. If you&#8217;re
+setting up an account with a web host, a MySQL account
+needs to be set up for you. From there, you can create
+the bugs account, or use the account given to you.</p>
+<div class="section" id="running-mysql-as-non-root">
+<h4>Running MySQL as Non-Root<a class="headerlink" href="#running-mysql-as-non-root" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="the-custom-configuration-method">
+<h5>The Custom Configuration Method<a class="headerlink" href="#the-custom-configuration-method" title="Permalink to this headline">¶</a></h5>
+<p>Create a file .my.cnf in your
+home directory (using /home/foo in this example)
+as follows....</p>
+<div class="highlight-python"><pre>\[mysqld]
+datadir=/home/foo/mymysql
+socket=/home/foo/mymysql/thesock
+port=8081
+\[mysql]
+socket=/home/foo/mymysql/thesock
+port=8081
+\[mysql.server]
+user=mysql
+basedir=/var/lib
+\[safe_mysqld]
+err-log=/home/foo/mymysql/the.log
+pid-file=/home/foo/mymysql/the.pid</pre>
+</div>
+</div>
+<div class="section" id="the-custom-built-method">
+<h5>The Custom Built Method<a class="headerlink" href="#the-custom-built-method" title="Permalink to this headline">¶</a></h5>
+<p>You can install MySQL as a not-root, if you really need to.
+Build it with PREFIX set to <tt class="file docutils literal"><span class="pre">/home/foo/mysql</span></tt>,
+or use pre-installed executables, specifying that you want
+to put all of the data files in <tt class="file docutils literal"><span class="pre">/home/foo/mysql/data</span></tt>.
+If there is another MySQL server running on the system that you
+do not own, use the -P option to specify a TCP port that is not
+in use.</p>
+</div>
+<div class="section" id="starting-the-server">
+<h5>Starting the Server<a class="headerlink" href="#starting-the-server" title="Permalink to this headline">¶</a></h5>
+<p>After your mysqld program is built and any .my.cnf file is
+in place, you must initialize the databases (ONCE).</p>
+<div class="highlight-python"><pre>``bash$`` :command:`mysql_install_db`</pre>
+</div>
+<p>Then start the daemon with</p>
+<div class="highlight-python"><pre>``bash$`` :command:`safe_mysql &amp;`</pre>
+</div>
+<p>After you start mysqld the first time, you then connect to
+it as &#8220;root&#8221; and <strong class="command">GRANT</strong> permissions to other
+users. (Again, the MySQL root account has nothing to do with
+the *NIX root account.)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need to start the daemons yourself. You can either
+ask your system administrator to add them to system startup files, or
+add a crontab entry that runs a script to check on these daemons
+and restart them if needed.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do NOT run daemons or other services on a server without first
+consulting your system administrator! Daemons use up system resources
+and running one may be in violation of your terms of service for any
+machine on which you are a user!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id22">
+<h3>Perl<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<p>On the extremely rare chance that you don&#8217;t have Perl on
+the machine, you will have to build the sources
+yourself. The following commands should get your system
+installed with your own personal version of Perl:</p>
+<div class="highlight-python"><pre>``bash$`` :command:`wget http://perl.org/CPAN/src/stable.tar.gz```bash$`` :command:`tar zvxf stable.tar.gz```bash$`` :command:`cd perl-5.10.1```bash$`` :command:`sh Configure -de -Dprefix=/home/foo/perl```bash$`` :command:`make &amp;&amp; make test &amp;&amp; make install`</pre>
+</div>
+<p>Once you have Perl installed into a directory (probably
+in <tt class="file docutils literal"><span class="pre">~/perl/bin</span></tt>), you will need to
+install the Perl Modules, described below.</p>
+</div>
+<div class="section" id="install-perlmodules-nonroot">
+<span id="id23"></span><h3>Perl Modules<a class="headerlink" href="#install-perlmodules-nonroot" title="Permalink to this headline">¶</a></h3>
+<p>Installing the Perl modules as a non-root user is accomplished by
+running the <tt class="file docutils literal"><span class="pre">install-module.pl</span></tt>
+script. For more details on this script, see
+<cite>:file:`install-module.pl</cite>
+documentation &lt;../html/api/install-module.html&gt;`_</p>
+</div>
+<div class="section" id="http-server">
+<h3>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this headline">¶</a></h3>
+<p>Ideally, this also needs to be installed as root and
+run under a special web server account. As long as
+the web server will allow the running of *.cgi files outside of a
+cgi-bin, and a way of denying web access to certain files (such as a
+.htaccess file), you should be good in this department.</p>
+<div class="section" id="running-apache-as-non-root">
+<h4>Running Apache as Non-Root<a class="headerlink" href="#running-apache-as-non-root" title="Permalink to this headline">¶</a></h4>
+<p>You can run Apache as a non-root user, but the port will need
+to be set to one above 1024. If you type <strong class="command">httpd -V</strong>,
+you will get a list of the variables that your system copy of httpd
+uses. One of those, namely HTTPD_ROOT, tells you where that
+installation looks for its config information.</p>
+<p>From there, you can copy the config files to your own home
+directory to start editing. When you edit those and then use the -d
+option to override the HTTPD_ROOT compiled into the web server, you
+get control of your own customized web server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need to start the daemons yourself. You can either
+ask your system administrator to add them to system startup files, or
+add a crontab entry that runs a script to check on these daemons
+and restart them if needed.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do NOT run daemons or other services on a server without first
+consulting your system administrator! Daemons use up system resources
+and running one may be in violation of your terms of service for any
+machine on which you are a user!</p>
+</div>
+</div>
+</div>
+<div class="section" id="id24">
+<h3>Bugzilla<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<p>When you run <strong class="command">./checksetup.pl</strong> to create
+the <tt class="file docutils literal"><span class="pre">localconfig</span></tt> file, it will list the Perl
+modules it finds. If one is missing, go back and double-check the
+module installation from <a class="reference internal" href="#install-perlmodules-nonroot"><em>Perl Modules</em></a>,
+then delete the <tt class="file docutils literal"><span class="pre">localconfig</span></tt> file and try again.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">One option in <tt class="file docutils literal"><span class="pre">localconfig</span></tt> you
+might have problems with is the web server group. If you can&#8217;t
+successfully browse to the <tt class="file docutils literal"><span class="pre">index.cgi</span></tt> (like
+a Forbidden error), you may have to relax your permissions,
+and blank out the web server group. Of course, this may pose
+as a security risk. Having a properly jailed shell and/or
+limited access to shell accounts may lessen the security risk,
+but use at your own risk.</p>
+</div>
+<div class="section" id="suexec-or-shared-hosting">
+<span id="suexec"></span><h4>suexec or shared hosting<a class="headerlink" href="#suexec-or-shared-hosting" title="Permalink to this headline">¶</a></h4>
+<p>If you are running on a system that uses suexec (most shared
+hosting environments do this), you will need to set the
+<em>webservergroup</em> value in <tt class="file docutils literal"><span class="pre">localconfig</span></tt>
+to match <em>your</em> primary group, rather than the one
+the web server runs under.  You will need to run the following
+shell commands after running <strong class="command">./checksetup.pl</strong>,
+every time you run it (or modify <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>
+to do them for you via the system() command).</p>
+<div class="highlight-python"><pre>for i in docs graphs images js skins; do find $i -type d -exec chmod o+rx {} \\; ; done
+for i in jpg gif css js png html rdf xul; do find . -name \\*.$i -exec chmod o+r {} \\; ; done
+find . -name .htaccess -exec chmod o+r {} \\;
+chmod o+x . data data/webdot</pre>
+</div>
+<p>Pay particular attention to the number of semicolons and dots.
+They are all important.  A future version of Bugzilla will
+hopefully be able to do this for you out of the box.</p>
+</div>
+</div>
+</div>
+<div class="section" id="upgrading-to-new-releases">
+<span id="upgrade"></span><h2>Upgrading to New Releases<a class="headerlink" href="#upgrading-to-new-releases" title="Permalink to this headline">¶</a></h2>
+<p>Upgrading to new Bugzilla releases is very simple. There is
+a script named <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> included with
+Bugzilla that will automatically do all of the database migration
+for you.</p>
+<p>The following sections explain how to upgrade from one
+version of Bugzilla to another. Whether you are upgrading
+from one bug-fix version to another (such as 4.2 to 4.2.1)
+or from one major version to another (such as from 4.0 to 4.2),
+the instructions are always the same.</p>
+<div class="section" id="before-you-upgrade">
+<span id="upgrade-before"></span><h3>Before You Upgrade<a class="headerlink" href="#before-you-upgrade" title="Permalink to this headline">¶</a></h3>
+<p>Before you start your upgrade, there are a few important
+steps to take:</p>
+<ol class="arabic">
+<li><p class="first">Read the <a class="reference external" href="http://www.bugzilla.org/releases/">Release
+Notes</a> of the version you&#8217;re upgrading to,
+particularly the &#8220;Notes for Upgraders&#8221; section.</p>
+</li>
+<li><p class="first">View the Sanity Check (<a class="reference internal" href="administration.html#sanitycheck"><em>Checking and Maintaining Database Integrity</em></a>) page
+on your installation before upgrading. Attempt to fix all warnings
+that the page produces before you go any further, or you may
+experience problems  during your upgrade.</p>
+</li>
+<li><p class="first">Shut down your Bugzilla installation by putting some HTML or
+text in the shutdownhtml parameter
+(see <a class="reference internal" href="administration.html#parameters"><em>Bugzilla Configuration</em></a>).</p>
+</li>
+<li><p class="first">Make a backup of the Bugzilla database.
+<em>THIS IS VERY IMPORTANT</em>. If
+anything goes wrong during the upgrade, your installation
+can be corrupted beyond recovery. Having a backup keeps you safe.
+.. warning:: Upgrading is a one-way process. You cannot &#8220;downgrade&#8221; an</p>
+<blockquote>
+<div><p>upgraded Bugzilla. If you wish to revert to the old Bugzilla
+version for any reason, you will have to restore your database
+from this backup.</p>
+</div></blockquote>
+<p>Here are some sample commands you could use to backup
+your database, depending on what database system you&#8217;re
+using. You may have to modify these commands for your
+particular setup.
+MySQL:</p>
+<blockquote>
+<div><p><strong class="command">mysqldump &#8211;opt -u bugs -p bugs &gt; bugs.sql</strong></p>
+</div></blockquote>
+<dl class="docutils">
+<dt>PostgreSQL:</dt>
+<dd><p class="first last"><strong class="command">pg_dump &#8211;no-privileges &#8211;no-owner -h localhost -U bugs
+&gt; bugs.sql</strong></p>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="getting-the-new-bugzilla">
+<span id="upgrade-files"></span><h3>Getting The New Bugzilla<a class="headerlink" href="#getting-the-new-bugzilla" title="Permalink to this headline">¶</a></h3>
+<p>There are three ways to get the new version of Bugzilla.
+We&#8217;ll list them here briefly and then explain them
+more later.</p>
+<dl class="docutils">
+<dt>Bzr (<a class="reference internal" href="#upgrade-bzr"><em>Upgrading using Bzr</em></a>)</dt>
+<dd>If you have <strong class="command">bzr</strong> installed on your machine
+and you have Internet access, this is the easiest way to
+upgrade, particularly if you have made modifications
+to the code or templates of Bugzilla.</dd>
+<dt>Download the tarball (<a class="reference internal" href="#upgrade-tarball"><em>Upgrading using the tarball</em></a>)</dt>
+<dd>This is a very simple way to upgrade, and good if you
+haven&#8217;t made many (or any) modifications to the code or
+templates of your Bugzilla.</dd>
+<dt>Patches (<a class="reference internal" href="#upgrade-patches"><em>Upgrading using patches</em></a>)</dt>
+<dd>If you have made modifications to your Bugzilla, and
+you don&#8217;t have Internet access or you don&#8217;t want to use
+bzr, then this is the best way to upgrade.
+You can only do minor upgrades (such as 4.2 to 4.2.1 or
+4.2.1 to 4.2.2) with patches.</dd>
+</dl>
+<div class="section" id="if-you-have-modified-your-bugzilla">
+<span id="upgrade-modified"></span><h4>If you have modified your Bugzilla<a class="headerlink" href="#if-you-have-modified-your-bugzilla" title="Permalink to this headline">¶</a></h4>
+<p>If you have modified the code or templates of your Bugzilla,
+then upgrading requires a bit more thought and effort.
+A discussion of the various methods of updating compared with
+degree and methods of local customization can be found in
+<a class="reference internal" href="customization.html#template-method"><em>Choosing a Customization Method</em></a>.</p>
+<p>The larger the jump you are trying to make, the more difficult it
+is going to be to upgrade if you have made local customizations.
+Upgrading from 4.2 to 4.2.1 should be fairly painless even if
+you are heavily customized, but going from 2.18 to 4.2 is going
+to mean a fair bit of work re-writing your local changes to use
+the new files, logic, templates, etc. If you have done no local
+changes at all, however, then upgrading should be approximately
+the same amount of work regardless of how long it has been since
+your version was released.</p>
+</div>
+<div class="section" id="upgrading-using-bzr">
+<span id="upgrade-bzr"></span><h4>Upgrading using Bzr<a class="headerlink" href="#upgrading-using-bzr" title="Permalink to this headline">¶</a></h4>
+<p>This requires that you have bzr installed (most Unix machines do),
+and requires that you are able to access
+<a class="reference external" href="http://bzr.mozilla.org/bugzilla/">bzr.mozilla.org</a>,
+which may not be an option if you don&#8217;t have Internet access.</p>
+<p>The following shows the sequence of commands needed to update a
+Bugzilla installation via Bzr, and a typical series of results.
+These commands assume that you already have Bugzilla installed
+using Bzr.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If your installation is still using CVS, you must first convert
+it to Bzr. A very detailed step by step documentation can be
+found on <a class="reference external" href="https://wiki.mozilla.org/Bugzilla:Moving_From_CVS_To_Bazaar">wiki.mozilla.org</a>.</p>
+</div>
+<div class="highlight-python"><pre>bash$ :command:`cd /var/www/html/bugzilla`
+bash$ :command:`bzr switch 4.2` (only run this command when not yet running 4.2)
+bash$ :command:`bzr up -r tag:bugzilla-4.2.1`
++N  extensions/MoreBugUrl/
++N  extensions/MoreBugUrl/Config.pm
++N  extensions/MoreBugUrl/Extension.pm
+...
+M  Bugzilla/Attachment.pm
+M  Bugzilla/Attachment/PatchReader.pm
+M  Bugzilla/Bug.pm
+...
+All changes applied successfully.</pre>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">If a line in the output from <strong class="command">bzr up</strong> mentions
+a conflict, then that represents a file with local changes that
+Bzr was unable to properly merge. You need to resolve these
+conflicts manually before Bugzilla (or at least the portion using
+that file) will be usable.</p>
+</div>
+</div>
+<div class="section" id="upgrading-using-the-tarball">
+<span id="upgrade-tarball"></span><h4>Upgrading using the tarball<a class="headerlink" href="#upgrading-using-the-tarball" title="Permalink to this headline">¶</a></h4>
+<p>If you are unable (or unwilling) to use Bzr, another option that&#8217;s
+always available is to obtain the latest tarball from the <a class="reference external" href="http://www.bugzilla.org/download/">Download Page</a> and
+create a new Bugzilla installation from that.</p>
+<p>This sequence of commands shows how to get the tarball from the
+command-line; it is also possible to download it from the site
+directly in a web browser. If you go that route, save the file
+to the <tt class="file docutils literal"><span class="pre">/var/www/html</span></tt>
+directory (or its equivalent, if you use something else) and
+omit the first three lines of the example.</p>
+<div class="highlight-python"><pre>bash$ :command:`cd /var/www/html`
+bash$ :command:`wget http://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-4.2.1.tar.gz`*(Output omitted)*
+bash$ :command:`tar xzvf bugzilla-4.2.1.tar.gz`
+bugzilla-4.2.1/
+bugzilla-4.2.1/colchange.cgi*(Output truncated)*
+bash$ :command:`cd bugzilla-4.2.1`
+bash$ :command:`cp ../bugzilla/localconfig* .`
+bash$ :command:`cp -r ../bugzilla/data .`
+bash$ :command:`cd ..`
+bash$ :command:`mv bugzilla bugzilla.old`
+bash$ :command:`mv bugzilla-4.2.1 bugzilla`</pre>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <strong class="command">cp</strong> commands both end with periods which
+is a very important detail&#8211;it means that the destination
+directory is the current working directory.</p>
+</div>
+<p>This upgrade method will give you a clean install of Bugzilla.
+That&#8217;s fine if you don&#8217;t have any local customizations that you
+want to maintain. If you do have customizations, then you will
+need to reapply them by hand to the appropriate files.</p>
+</div>
+<div class="section" id="upgrading-using-patches">
+<span id="upgrade-patches"></span><h4>Upgrading using patches<a class="headerlink" href="#upgrading-using-patches" title="Permalink to this headline">¶</a></h4>
+<p>A patch is a collection of all the bug fixes that have been made
+since the last bug-fix release.</p>
+<p>If you are doing a bug-fix upgrade—that is, one where only the
+last number of the revision changes, such as from 4.2 to
+4.2.1—then you have the option of obtaining and applying a
+patch file from the <a class="reference external" href="http://www.bugzilla.org/download/">Download Page</a>.</p>
+<p>As above, this example starts with obtaining the file via the
+command line. If you have already downloaded it, you can omit the
+first two commands.</p>
+<div class="highlight-python"><pre>bash$ :command:`cd /var/www/html/bugzilla`
+bash$ :command:`wget http://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-4.2-to-4.2.1.diff.gz`*(Output omitted)*
+bash$ :command:`gunzip bugzilla-4.2-to-4.2.1.diff.gz`
+bash$ :command:`patch -p1 &lt; bugzilla-4.2-to-4.2.1.diff`
+patching file Bugzilla/Constants.pm
+patching file enter_bug.cgi*(etc.)*</pre>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be aware that upgrading from a patch file does not change the
+entries in your <tt class="file docutils literal"><span class="pre">.bzr</span></tt> directory.
+This could make it more difficult to upgrade using Bzr
+(<a class="reference internal" href="#upgrade-bzr"><em>Upgrading using Bzr</em></a>) in the future.</p>
+</div>
+</div>
+</div>
+<div class="section" id="completing-your-upgrade">
+<span id="upgrade-completion"></span><h3>Completing Your Upgrade<a class="headerlink" href="#completing-your-upgrade" title="Permalink to this headline">¶</a></h3>
+<p>Now that you have the new Bugzilla code, there are a few final
+steps to complete your upgrade.</p>
+<ol class="arabic">
+<li><p class="first">If your new Bugzilla installation is in a different
+directory or on a different machine than your old Bugzilla
+installation, make sure that you have copied the
+<tt class="file docutils literal"><span class="pre">data</span></tt> directory and the
+<tt class="file docutils literal"><span class="pre">localconfig</span></tt> file from your old Bugzilla
+installation. (If you followed the tarball instructions
+above, this has already happened.)</p>
+</li>
+<li><p class="first">If this is a major update, check that the configuration
+(<a class="reference internal" href="#configuration"><em>Configuration</em></a>) for your new Bugzilla is
+up-to-date. Sometimes the configuration requirements change
+between major versions.</p>
+</li>
+<li><p class="first">If you didn&#8217;t do it as part of the above configuration step,
+now you need to run <strong class="command">checksetup.pl</strong>, which
+will do everything required to convert your existing database
+and settings for the new version:</p>
+<div class="highlight-python"><pre>bash$ :command:`cd /var/www/html/bugzilla`
+bash$ :command:`./checksetup.pl`</pre>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">If this is a major upgrade (say, 3.6 to 4.2 or similar),
+running <strong class="command">checksetup.pl</strong> on a large
+installation (75,000 or more bugs) can take a long time,
+possibly several hours.</p>
+</div>
+</li>
+<li><p class="first">Clear any HTML or text that you put into the shutdownhtml
+parameter, to re-activate Bugzilla.</p>
+</li>
+<li><p class="first">View the Sanity Check (<a class="reference internal" href="administration.html#sanitycheck"><em>Checking and Maintaining Database Integrity</em></a>) page in your
+upgraded Bugzilla.
+It is recommended that, if possible, you fix any problems
+you see, immediately. Failure to do this may mean that Bugzilla
+will not work correctly. Be aware that if the sanity check page
+contains more errors after an upgrade, it doesn&#8217;t necessarily
+mean there are more errors in your database than there were
+before, as additional tests are added to the sanity check over
+time, and it is possible that those errors weren&#8217;t being
+checked for in the old version.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="automatic-notifications-of-new-releases">
+<span id="upgrade-notifications"></span><h3>Automatic Notifications of New Releases<a class="headerlink" href="#automatic-notifications-of-new-releases" title="Permalink to this headline">¶</a></h3>
+<p>Bugzilla 3.0 introduced the ability to automatically notify
+administrators when new releases are available, based on the
+<tt class="docutils literal"><span class="pre">upgrade_notification</span></tt> parameter, see
+<a class="reference internal" href="administration.html#parameters"><em>Bugzilla Configuration</em></a>. Administrators will see these
+notifications when they access the <tt class="file docutils literal"><span class="pre">index.cgi</span></tt>
+page, i.e. generally when logging in. Bugzilla will check once per
+day for new releases, unless the parameter is set to
+<tt class="docutils literal"><span class="pre">disabled</span></tt>. If you are behind a proxy, you may have to set
+the <tt class="docutils literal"><span class="pre">proxy_url</span></tt> parameter accordingly. If the proxy
+requires authentication, use the
+<tt class="docutils literal"><span class="pre">http://user:pass&#64;proxy_url/</span></tt> syntax.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing Bugzilla</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#perl">Perl</a></li>
+<li><a class="reference internal" href="#database-engine">Database Engine</a><ul>
+<li><a class="reference internal" href="#mysql">MySQL</a></li>
+<li><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
+<li><a class="reference internal" href="#oracle">Oracle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#web-server">Web Server</a></li>
+<li><a class="reference internal" href="#bugzilla">Bugzilla</a></li>
+<li><a class="reference internal" href="#perl-modules">Perl Modules</a></li>
+<li><a class="reference internal" href="#mail-transfer-agent-mta">Mail Transfer Agent (MTA)</a></li>
+<li><a class="reference internal" href="#installing-bugzilla-on-mod-perl">Installing Bugzilla on mod_perl</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#localconfig">localconfig</a></li>
+<li><a class="reference internal" href="#database-server">Database Server</a><ul>
+<li><a class="reference internal" href="#bugzilla-database-schema">Bugzilla Database Schema</a></li>
+<li><a class="reference internal" href="#id6">MySQL</a><ul>
+<li><a class="reference internal" href="#allow-large-attachments-and-many-comments">Allow large attachments and many comments</a></li>
+<li><a class="reference internal" href="#allow-small-words-in-full-text-indexes">Allow small words in full-text indexes</a></li>
+<li><a class="reference internal" href="#add-a-user-to-mysql">Add a user to MySQL</a></li>
+<li><a class="reference internal" href="#permit-attachments-table-to-grow-beyond-4gb">Permit attachments table to grow beyond 4GB</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">PostgreSQL</a><ul>
+<li><a class="reference internal" href="#add-a-user-to-postgresql">Add a User to PostgreSQL</a></li>
+<li><a class="reference internal" href="#configure-postgresql">Configure PostgreSQL</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">Oracle</a><ul>
+<li><a class="reference internal" href="#create-a-new-tablespace">Create a New Tablespace</a></li>
+<li><a class="reference internal" href="#add-a-user-to-oracle">Add a User to Oracle</a></li>
+<li><a class="reference internal" href="#configure-the-web-server">Configure the Web Server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlite">SQLite</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checksetup-pl">checksetup.pl</a></li>
+<li><a class="reference internal" href="#http">Web server</a><ul>
+<li><a class="reference internal" href="#bugzilla-using-apache">Bugzilla using Apache</a><ul>
+<li><a class="reference internal" href="#apache-httpd-with-mod-cgi">Apache <em>httpd</em> with mod_cgi</a></li>
+<li><a class="reference internal" href="#apache-httpd-with-mod-perl">Apache <em>httpd</em> with mod_perl</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#microsoft-internet-information-services">Microsoft <em>Internet Information Services</em></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install-config-bugzilla">Bugzilla</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#optional-additional-configuration">Optional Additional Configuration</a><ul>
+<li><a class="reference internal" href="#bug-graphs">Bug Graphs</a></li>
+<li><a class="reference internal" href="#the-whining-cron">The Whining Cron</a></li>
+<li><a class="reference internal" href="#whining">Whining</a></li>
+<li><a class="reference internal" href="#serving-alternate-formats-with-the-right-mime-type">Serving Alternate Formats with the right MIME type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#multiple-bugzilla-databases-with-a-single-installation">Multiple Bugzilla databases with a single installation</a></li>
+<li><a class="reference internal" href="#os-specific-installation-notes">OS-Specific Installation Notes</a><ul>
+<li><a class="reference internal" href="#microsoft-windows">Microsoft Windows</a><ul>
+<li><a class="reference internal" href="#win32-perl">Win32 Perl</a></li>
+<li><a class="reference internal" href="#perl-modules-on-win32">Perl Modules on Win32</a></li>
+<li><a class="reference internal" href="#serving-the-web-pages">Serving the web pages</a></li>
+<li><a class="reference internal" href="#sending-email">Sending Email</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mac-os-x"><em>Mac OS X</em></a><ul>
+<li><a class="reference internal" href="#sendmail">Sendmail</a></li>
+<li><a class="reference internal" href="#libraries-perl-modules-on-mac-os-x">Libraries &amp; Perl Modules on Mac OS X</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#linux-distributions">Linux Distributions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unix-non-root-installation-notes">UNIX (non-root) Installation Notes</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#id21">MySQL</a><ul>
+<li><a class="reference internal" href="#running-mysql-as-non-root">Running MySQL as Non-Root</a><ul>
+<li><a class="reference internal" href="#the-custom-configuration-method">The Custom Configuration Method</a></li>
+<li><a class="reference internal" href="#the-custom-built-method">The Custom Built Method</a></li>
+<li><a class="reference internal" href="#starting-the-server">Starting the Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id22">Perl</a></li>
+<li><a class="reference internal" href="#install-perlmodules-nonroot">Perl Modules</a></li>
+<li><a class="reference internal" href="#http-server">HTTP Server</a><ul>
+<li><a class="reference internal" href="#running-apache-as-non-root">Running Apache as Non-Root</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id24">Bugzilla</a><ul>
+<li><a class="reference internal" href="#suexec-or-shared-hosting">suexec or shared hosting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upgrading-to-new-releases">Upgrading to New Releases</a><ul>
+<li><a class="reference internal" href="#before-you-upgrade">Before You Upgrade</a></li>
+<li><a class="reference internal" href="#getting-the-new-bugzilla">Getting The New Bugzilla</a><ul>
+<li><a class="reference internal" href="#if-you-have-modified-your-bugzilla">If you have modified your Bugzilla</a></li>
+<li><a class="reference internal" href="#upgrading-using-bzr">Upgrading using Bzr</a></li>
+<li><a class="reference internal" href="#upgrading-using-the-tarball">Upgrading using the tarball</a></li>
+<li><a class="reference internal" href="#upgrading-using-patches">Upgrading using patches</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#completing-your-upgrade">Completing Your Upgrade</a></li>
+<li><a class="reference internal" href="#automatic-notifications-of-new-releases">Automatic Notifications of New Releases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/installation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

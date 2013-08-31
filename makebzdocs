@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+use File::Slurp;
+
+chdir("/usr/src/bugzilla/docs/en/xml/");
+
+# Hack to copy and paste entities into each file
+my @ents_files = ("bugzilla.ent", "about.xml");
+
+my $ents = "";
+foreach my $ent_file (@ents_files) {
+    my @lines = read_file($ent_file);
+
+    @lines = grep(/<!ENTITY/, @lines);
+    $ents .= join("", @lines);
+}
+
+# Add any used entities that DocBook defines itself
+$ents .= "<!ENTITY mdash \"—\">\n";
+
+# We munge the file into a temporary file before calling db2rst.py on it
+foreach my $infile (glob("*.xml")) {
+    # Empty bogus file
+    next if $infile eq "index.xml";
+
+    my $text = read_file($infile);
+
+    my $basename = $infile;
+    $basename =~ s/\.xml$//;
+
+    $text =~ s/%myents;/$ents/;
+
+    write_file("$basename.tmp", $text);
+
+    system("db2rst.py $basename.tmp > ../rst/source/$basename.rst");
+    unlink($basename . ".tmp");
+}

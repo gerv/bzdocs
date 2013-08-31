@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Troubleshooting &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="troubleshooting">
+<span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<p>This section gives solutions to common Bugzilla installation
+problems. If none of the section headings seems to match your
+problem, read the general advice.</p>
+<div class="section" id="general-advice">
+<span id="id2"></span><h2>General Advice<a class="headerlink" href="#general-advice" title="Permalink to this headline">¶</a></h2>
+<p>If you can&#8217;t get <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> to run to
+completion, it normally explains what&#8217;s wrong and how to fix it.
+If you can&#8217;t work it out, or if it&#8217;s being uncommunicative, post
+the errors in the
+<a class="reference external" href="news://news.mozilla.org/mozilla.support.bugzilla">mozilla.support.bugzilla</a>
+newsgroup.</p>
+<p>If you have made it all the way through
+<a class="reference internal" href="installation.html#installation"><em>Installation</em></a> (Installation) and
+<a class="reference internal" href="installation.html#configuration"><em>Configuration</em></a> (Configuration) but accessing the Bugzilla
+URL doesn&#8217;t work, the first thing to do is to check your web server error
+log. For Apache, this is often located at
+<tt class="file docutils literal"><span class="pre">/etc/logs/httpd/error_log</span></tt>. The error messages
+you see may be self-explanatory enough to enable you to diagnose and
+fix the problem. If not, see below for some commonly-encountered
+errors. If that doesn&#8217;t help, post the errors to the newsgroup.</p>
+<p>Bugzilla can also log all user-based errors (and many code-based errors)
+that occur, without polluting the web server&#8217;s error log.  To enable
+Bugzilla error logging, create a file that Bugzilla can write to, named
+<tt class="file docutils literal"><span class="pre">errorlog</span></tt>, in the Bugzilla <tt class="file docutils literal"><span class="pre">data</span></tt>
+directory.  Errors will be logged as they occur, and will include the type
+of the error, the IP address and username (if available) of the user who
+triggered the error, and the values of all environment variables; if a
+form was being submitted, the data in the form will also be included.
+To disable error logging, delete or rename the
+<tt class="file docutils literal"><span class="pre">errorlog</span></tt> file.</p>
+</div>
+<div class="section" id="the-apache-web-server-is-not-serving-bugzilla-pages">
+<span id="trbl-testserver"></span><h2>The Apache web server is not serving Bugzilla pages<a class="headerlink" href="#the-apache-web-server-is-not-serving-bugzilla-pages" title="Permalink to this headline">¶</a></h2>
+<p>After you have run <strong class="command">checksetup.pl</strong> twice,
+run <strong class="command">testserver.pl http://yoursite.yourdomain/yoururl</strong>
+to confirm that your web server is configured properly for
+Bugzilla.</p>
+<div class="highlight-python"><pre>``bash$`` ./testserver.pl http://landfill.bugzilla.org/bugzilla-tip
+TEST-OK Webserver is running under group id in $webservergroup.
+TEST-OK Got ant picture.
+TEST-OK Webserver is executing CGIs.
+TEST-OK Webserver is preventing fetch of http://landfill.bugzilla.org/bugzilla-tip/localconfig.</pre>
+</div>
+<p id="trbl-perlmodule">I installed a Perl module, but
+<tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt> claims it&#8217;s not installed!
+################################################################################</p>
+<p>This could be caused by one of two things:</p>
+<ol class="arabic simple">
+<li>You have two versions of Perl on your machine. You are installing
+modules into one, and Bugzilla is using the other. Rerun the CPAN
+commands (or manual compile) using the full path to Perl from the
+top of <tt class="file docutils literal"><span class="pre">checksetup.pl</span></tt>. This will make sure you
+are installing the modules in the right place.</li>
+<li>The permissions on your library directories are set incorrectly.
+They must, at the very least, be readable by the web server user or
+group. It is recommended that they be world readable.</li>
+</ol>
+</div>
+<div class="section" id="dbd-sponge-db-prepare-failed">
+<span id="trbl-dbdsponge"></span><h2>DBD::Sponge::db prepare failed<a class="headerlink" href="#dbd-sponge-db-prepare-failed" title="Permalink to this headline">¶</a></h2>
+<p>The following error message may appear due to a bug in DBD::mysql
+(over which the Bugzilla team have no control):</p>
+<div class="highlight-python"><pre>DBD::Sponge::db prepare failed: Cannot determine NUM_OF_FIELDS at D:/Perl/site/lib/DBD/mysql.pm line 248.
+SV = NULL(0x0) at 0x20fc444
+REFCNT = 1
+FLAGS = (PADBUSY,PADMY)</pre>
+</div>
+<p>To fix this, go to
+<tt class="file docutils literal"><span class="pre">&lt;path-to-perl&gt;/lib/DBD/sponge.pm</span></tt>
+in your Perl installation and replace</p>
+<div class="highlight-python"><pre>my $numFields;
+if ($attribs-&gt;{'NUM_OF_FIELDS'}) {
+$numFields = $attribs-&gt;{'NUM_OF_FIELDS'};
+} elsif ($attribs-&gt;{'NAME'}) {
+$numFields = @{$attribs-&gt;{NAME}};</pre>
+</div>
+<p>with</p>
+<div class="highlight-python"><pre>my $numFields;
+if ($attribs-&gt;{'NUM_OF_FIELDS'}) {
+$numFields = $attribs-&gt;{'NUM_OF_FIELDS'};
+} elsif ($attribs-&gt;{'NAMES'}) {
+$numFields = @{$attribs-&gt;{NAMES}};</pre>
+</div>
+<p>(note the S added to NAME.)</p>
+</div>
+<div class="section" id="cannot-chdir-var-spool-mqueue">
+<span id="paranoid-security"></span><h2>cannot chdir(/var/spool/mqueue)<a class="headerlink" href="#cannot-chdir-var-spool-mqueue" title="Permalink to this headline">¶</a></h2>
+<p>If you are installing Bugzilla on SuSE Linux, or some other
+distributions with <tt class="docutils literal"><span class="pre">paranoid</span></tt> security options, it is
+possible that the checksetup.pl script may fail with the error:</p>
+<div class="highlight-python"><pre>cannot chdir(/var/spool/mqueue): Permission denied</pre>
+</div>
+<p>This is because your <tt class="file docutils literal"><span class="pre">/var/spool/mqueue</span></tt>
+directory has a mode of <tt class="docutils literal"><span class="pre">drwx------</span></tt>.
+Type <strong class="command">chmod 755 :file:</strong>/var/spool/mqueue``
+as root to fix this problem. This will allow any process running on your
+machine the ability to <em>read</em> the
+<tt class="file docutils literal"><span class="pre">/var/spool/mqueue</span></tt> directory.</p>
+</div>
+<div class="section" id="everybody-is-constantly-being-forced-to-relogin">
+<span id="trbl-relogin-everyone"></span><h2>Everybody is constantly being forced to relogin<a class="headerlink" href="#everybody-is-constantly-being-forced-to-relogin" title="Permalink to this headline">¶</a></h2>
+<p>The most-likely cause is that the <tt class="docutils literal"><span class="pre">cookiepath</span></tt> parameter
+is not set correctly in the Bugzilla configuration.  You can change this (if
+you&#8217;re a Bugzilla administrator) from the editparams.cgi page via the web interface.</p>
+<p>The value of the cookiepath parameter should be the actual directory
+containing your Bugzilla installation, <em>as seen by the end-user&#8217;s
+web browser</em>. Leading and trailing slashes are mandatory. You can
+also set the cookiepath to any directory which is a parent of the Bugzilla
+directory (such as &#8216;/&#8217;, the root directory). But you can&#8217;t put something
+that isn&#8217;t at least a partial match or it won&#8217;t work. What you&#8217;re actually
+doing is restricting the end-user&#8217;s browser to sending the cookies back only
+to that directory.</p>
+<p>How do you know if you want your specific Bugzilla directory or the
+whole site?</p>
+<p>If you have only one Bugzilla running on the server, and you don&#8217;t
+mind having other applications on the same server with it being able to see
+the cookies (you might be doing this on purpose if you have other things on
+your site that share authentication with Bugzilla), then you&#8217;ll want to have
+the cookiepath set to &#8220;/&#8221;, or to a sufficiently-high enough directory that
+all of the involved apps can see the cookies.</p>
+<div class="section" id="examples-of-urlbase-cookiepath-pairs-for-sharing-login-cookies">
+<span id="trbl-relogin-everyone-share"></span><h3>Examples of urlbase/cookiepath pairs for sharing login cookies<a class="headerlink" href="#examples-of-urlbase-cookiepath-pairs-for-sharing-login-cookies" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>::</dt>
+<dd>urlbase is <a class="reference external" href="http://bugzilla.mozilla.org/">http://bugzilla.mozilla.org/</a>
+cookiepath is /
+urlbase is <a class="reference external" href="http://tools.mysite.tld/bugzilla/">http://tools.mysite.tld/bugzilla/</a>
+but you have <a class="reference external" href="http://tools.mysite.tld/someotherapp/">http://tools.mysite.tld/someotherapp/</a> which shares
+authentication with your Bugzilla
+cookiepath is /</dd>
+</dl>
+</div></blockquote>
+<p>On the other hand, if you have more than one Bugzilla running on the
+server (some people do - we do on landfill) then you need to have the
+cookiepath restricted enough so that the different Bugzillas don&#8217;t
+confuse their cookies with one another.</p>
+</div>
+<div class="section" id="examples-of-urlbase-cookiepath-pairs-to-restrict-the-login-cookie">
+<span id="trbl-relogin-everyone-restrict"></span><h3>Examples of urlbase/cookiepath pairs to restrict the login cookie<a class="headerlink" href="#examples-of-urlbase-cookiepath-pairs-to-restrict-the-login-cookie" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>::</dt>
+<dd>urlbase is <a class="reference external" href="http://landfill.bugzilla.org/bugzilla-tip/">http://landfill.bugzilla.org/bugzilla-tip/</a>
+cookiepath is /bugzilla-tip/
+urlbase is <a class="reference external" href="http://landfill.bugzilla.org/bugzilla-4.0-branch/">http://landfill.bugzilla.org/bugzilla-4.0-branch/</a>
+cookiepath is /bugzilla-4.0-branch/</dd>
+</dl>
+</div></blockquote>
+<p>If you had cookiepath set to <tt class="docutils literal"><span class="pre">/</span></tt> at any point in the
+past and need to set it to something more restrictive
+(i.e. <tt class="docutils literal"><span class="pre">/bugzilla/</span></tt>), you can safely do this without
+requiring users to delete their Bugzilla-related cookies in their
+browser (this is true starting with Bugzilla 2.18 and Bugzilla 2.16.5).</p>
+</div>
+</div>
+<div class="section" id="index-cgi-doesn-t-show-up-unless-specified-in-the-url">
+<span id="trbl-index"></span><h2><tt class="file docutils literal"><span class="pre">index.cgi</span></tt> doesn&#8217;t show up unless specified in the URL<a class="headerlink" href="#index-cgi-doesn-t-show-up-unless-specified-in-the-url" title="Permalink to this headline">¶</a></h2>
+<p>You probably need to set up your web server in such a way that it
+will serve the index.cgi page as an index page.</p>
+<p>If you are using Apache, you can do this by adding
+<tt class="file docutils literal"><span class="pre">index.cgi</span></tt> to the end of the
+<tt class="docutils literal"><span class="pre">DirectoryIndex</span></tt> line
+as mentioned in <a class="reference internal" href="installation.html#http-apache"><em>Bugzilla using Apache</em></a>.</p>
+<p id="trbl-passwd-encryption">checksetup.pl reports &#8220;Client does not support authentication protocol
+requested by server...&#8221;
+##############################################################################################</p>
+<p>This error is occurring because you are using the new password
+encryption that comes with MySQL 4.1, while your
+<tt class="file docutils literal"><span class="pre">DBD::mysql</span></tt> module was compiled against an
+older version of MySQL. If you recompile <tt class="file docutils literal"><span class="pre">DBD::mysql</span></tt>
+against the current MySQL libraries (or just obtain a newer version
+of this module) then the error may go away.</p>
+<p>If that does not fix the problem, or if you cannot recompile the
+existing module (e.g. you&#8217;re running Windows) and/or don&#8217;t want to
+replace it (e.g. you want to keep using a packaged version), then a
+workaround is available from the MySQL docs:
+<a class="reference external" href="http://dev.mysql.com/doc/mysql/en/Old_client.html">http://dev.mysql.com/doc/mysql/en/Old_client.html</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#general-advice">General Advice</a></li>
+<li><a class="reference internal" href="#the-apache-web-server-is-not-serving-bugzilla-pages">The Apache web server is not serving Bugzilla pages</a></li>
+<li><a class="reference internal" href="#dbd-sponge-db-prepare-failed">DBD::Sponge::db prepare failed</a></li>
+<li><a class="reference internal" href="#cannot-chdir-var-spool-mqueue">cannot chdir(/var/spool/mqueue)</a></li>
+<li><a class="reference internal" href="#everybody-is-constantly-being-forced-to-relogin">Everybody is constantly being forced to relogin</a><ul>
+<li><a class="reference internal" href="#examples-of-urlbase-cookiepath-pairs-for-sharing-login-cookies">Examples of urlbase/cookiepath pairs for sharing login cookies</a></li>
+<li><a class="reference internal" href="#examples-of-urlbase-cookiepath-pairs-to-restrict-the-login-cookie">Examples of urlbase/cookiepath pairs to restrict the login cookie</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index-cgi-doesn-t-show-up-unless-specified-in-the-url"><tt class="file docutils literal"><span class="pre">index.cgi</span></tt> doesn&#8217;t show up unless specified in the URL</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/troubleshooting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

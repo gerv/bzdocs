@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customizing Bugzilla &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="customizing-bugzilla">
+<span id="customization"></span><h1>Customizing Bugzilla<a class="headerlink" href="#customizing-bugzilla" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bugzilla-extensions">
+<span id="extensions"></span><h2>Bugzilla Extensions<a class="headerlink" href="#bugzilla-extensions" title="Permalink to this headline">¶</a></h2>
+<p>One of the best ways to customize Bugzilla is by writing a Bugzilla
+Extension. Bugzilla Extensions let you modify both the code and
+UI of Bugzilla in a way that can be distributed to other Bugzilla
+users and ported forward to future versions of Bugzilla with minimal
+effort.</p>
+<p>See the <a class="reference external" href="../html/api/Bugzilla/Extension.html">Bugzilla Extension
+documentation</a> for information on how to write an Extension.</p>
+</div>
+<div class="section" id="custom-skins">
+<span id="cust-skins"></span><h2>Custom Skins<a class="headerlink" href="#custom-skins" title="Permalink to this headline">¶</a></h2>
+<p>Bugzilla allows you to have multiple skins. These are custom CSS and possibly
+also custom images for Bugzilla. To create a new custom skin, you have two
+choices:</p>
+<ul class="simple">
+<li>Make a single CSS file, and put it in the
+<tt class="file docutils literal"><span class="pre">skins/contrib</span></tt> directory.</li>
+<li>Make a directory that contains all the same CSS file
+names as <tt class="file docutils literal"><span class="pre">skins/standard/</span></tt>, and put
+your directory in <tt class="file docutils literal"><span class="pre">skins/contrib/</span></tt>.</li>
+</ul>
+<p>After you put the file or the directory there, make sure to run checksetup.pl
+so that it can reset the file permissions correctly.</p>
+<p>After you have installed the new skin, it will show up as an option in the
+user&#8217;s General Preferences. If you would like to force a particular skin on all
+users, just select it in the Default Preferences and then uncheck &#8220;Enabled&#8221; on
+the preference.</p>
+</div>
+<div class="section" id="template-customization">
+<span id="cust-templates"></span><h2>Template Customization<a class="headerlink" href="#template-customization" title="Permalink to this headline">¶</a></h2>
+<p>Administrators can configure the look and feel of Bugzilla without
+having to edit Perl files or face the nightmare of massive merge
+conflicts when they upgrade to a newer version in the future.</p>
+<p>Templatization also makes localized versions of Bugzilla possible,
+for the first time. It&#8217;s possible to have Bugzilla&#8217;s UI language
+determined by the user&#8217;s browser. More information is available in
+<a class="reference internal" href="#template-http-accept"><em>Configuring Bugzilla to Detect the User&#8217;s Language</em></a>.</p>
+<div class="section" id="template-directory-structure">
+<span id="template-directory"></span><h3>Template Directory Structure<a class="headerlink" href="#template-directory-structure" title="Permalink to this headline">¶</a></h3>
+<p>The template directory structure starts with top level directory
+named <tt class="file docutils literal"><span class="pre">template</span></tt>, which contains a directory
+for each installed localization. The next level defines the
+language used in the templates. Bugzilla comes with English
+templates, so the directory name is <tt class="file docutils literal"><span class="pre">en</span></tt>,
+and we will discuss <tt class="file docutils literal"><span class="pre">template/en</span></tt> throughout
+the documentation. Below <tt class="file docutils literal"><span class="pre">template/en</span></tt> is the
+<tt class="file docutils literal"><span class="pre">default</span></tt> directory, which contains all the
+standard templates shipped with Bugzilla.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A directory <tt class="file docutils literal"><span class="pre">data/templates</span></tt> also exists;
+this is where Template Toolkit puts the compiled versions of
+the templates from either the default or custom directories.
+<em>Do not</em> directly edit the files in this
+directory, or all your changes will be lost the next time
+Template Toolkit recompiles the templates.</p>
+</div>
+</div>
+<div class="section" id="choosing-a-customization-method">
+<span id="template-method"></span><h3>Choosing a Customization Method<a class="headerlink" href="#choosing-a-customization-method" title="Permalink to this headline">¶</a></h3>
+<p>If you want to edit Bugzilla&#8217;s templates, the first decision
+you must make is how you want to go about doing so. There are two
+choices, and which you use depends mainly on the scope of your
+modifications, and the method you plan to use to upgrade Bugzilla.</p>
+<p>The first method of making customizations is to directly edit the
+templates found in <tt class="file docutils literal"><span class="pre">template/en/default</span></tt>.
+This is probably the best way to go about it if you are going to
+be upgrading Bugzilla through Bzr, because if you then execute
+a <strong class="command">bzr update</strong>, any changes you have made will
+be merged automagically with the updated versions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you use this method, and Bzr conflicts occur during an
+update, the conflicted templates (and possibly other parts
+of your installation) will not work until they are resolved.</p>
+</div>
+<p>The second method is to copy the templates to be modified
+into a mirrored directory structure under
+<tt class="file docutils literal"><span class="pre">template/en/custom</span></tt>. Templates in this
+directory structure automatically override any identically-named
+and identically-located templates in the
+<tt class="file docutils literal"><span class="pre">default</span></tt> directory.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <tt class="file docutils literal"><span class="pre">custom</span></tt> directory does not exist
+at first and must be created if you want to use it.</p>
+</div>
+<p>The second method of customization should be used if you
+use the overwriting method of upgrade, because otherwise
+your changes will be lost.  This method may also be better if
+you are using the Bzr method of upgrading and are going to make major
+changes, because it is guaranteed that the contents of this directory
+will not be touched during an upgrade, and you can then decide whether
+to continue using your own templates, or make the effort to merge your
+changes into the new versions by hand.</p>
+<p>Using this method, your installation may break if incompatible
+changes are made to the template interface.  Such changes should
+be documented in the release notes, provided you are using a
+stable release of Bugzilla.  If you use using unstable code, you will
+need to deal with this one yourself, although if possible the changes
+will be mentioned before they occur in the deprecations section of the
+previous stable release&#8217;s release notes.</p>
+</div>
+<div class="section" id="how-to-edit-templates">
+<span id="template-edit"></span><h3>How To Edit Templates<a class="headerlink" href="#how-to-edit-templates" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are making template changes that you intend on submitting back
+for inclusion in standard Bugzilla, you should read the relevant
+sections of the
+<a class="reference external" href="http://www.bugzilla.org/docs/developer.html">Developers&#8217;
+Guide</a>.</p>
+</div>
+<p>The syntax of the Template Toolkit language is beyond the scope of
+this guide. It&#8217;s reasonably easy to pick up by looking at the current
+templates; or, you can read the manual, available on the
+<a class="reference external" href="http://www.template-toolkit.org">Template Toolkit home
+page</a>.</p>
+<p>One thing you should take particular care about is the need
+to properly HTML filter data that has been passed into the template.
+This means that if the data can possibly contain special HTML characters
+such as &lt;, and the data was not intended to be HTML, they need to be
+converted to entity form, i.e. &amp;lt;.  You use the &#8216;html&#8217; filter in the
+Template Toolkit to do this (or the &#8216;uri&#8217; filter to encode special
+characters in URLs).  If you forget, you may open up your installation
+to cross-site scripting attacks.</p>
+<p>Editing templates is a good way of doing a <tt class="docutils literal"><span class="pre">poor</span> <span class="pre">man's</span> <span class="pre">custom</span>
+<span class="pre">fields</span></tt>.
+For example, if you don&#8217;t use the Status Whiteboard, but want to have
+a free-form text entry box for <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">Identifier</span></tt>,
+then you can just
+edit the templates to change the field labels. It&#8217;s still be called
+status_whiteboard internally, but your users don&#8217;t need to know that.</p>
+</div>
+<div class="section" id="template-formats-and-types">
+<span id="template-formats"></span><h3>Template Formats and Types<a class="headerlink" href="#template-formats-and-types" title="Permalink to this headline">¶</a></h3>
+<p>Some CGI&#8217;s have the ability to use more than one template. For example,
+<tt class="file docutils literal"><span class="pre">buglist.cgi</span></tt> can output itself as RDF, or as two
+formats of HTML (complex and simple). The mechanism that provides this
+feature is extensible.</p>
+<p>Bugzilla can support different types of output, which again can have
+multiple formats. In order to request a certain type, you can append
+the &amp;ctype=&lt;contenttype&gt; (such as rdf or html) to the
+<tt class="file docutils literal"><span class="pre">&lt;cginame&gt;.cgi</span></tt> URL. If you would like to
+retrieve a certain format, you can use the &amp;format=&lt;format&gt;
+(such as simple or complex) in the URL.</p>
+<p>To see if a CGI supports multiple output formats and types, grep the
+CGI for <tt class="docutils literal"><span class="pre">get_format</span></tt>. If it&#8217;s not present, adding
+multiple format/type support isn&#8217;t too hard - see how it&#8217;s done in
+other CGIs, e.g. config.cgi.</p>
+<p>To make a new format template for a CGI which supports this,
+open a current template for
+that CGI and take note of the INTERFACE comment (if present.) This
+comment defines what variables are passed into this template. If
+there isn&#8217;t one, I&#8217;m afraid you&#8217;ll have to read the template and
+the code to find out what information you get.</p>
+<p>Write your template in whatever markup or text style is appropriate.</p>
+<p>You now need to decide what content type you want your template
+served as. The content types are defined in the
+<tt class="file docutils literal"><span class="pre">Bugzilla/Constants.pm</span></tt> file in the
+<tt class="file docutils literal"><span class="pre">contenttypes</span></tt>
+constant. If your content type is not there, add it. Remember
+the three- or four-letter tag assigned to your content type.
+This tag will be part of the template filename.</p>
+<p>Save the template as <tt class="file docutils literal"><span class="pre">&lt;stubname&gt;-&lt;formatname&gt;.&lt;contenttypetag&gt;.tmpl</span></tt>.
+Try out the template by calling the CGI as
+<tt class="file docutils literal"><span class="pre">&lt;cginame&gt;.cgi?format=&lt;formatname&gt;&amp;ctype=&lt;type&gt;</span></tt> .</p>
+</div>
+<div class="section" id="particular-templates">
+<span id="template-specific"></span><h3>Particular Templates<a class="headerlink" href="#particular-templates" title="Permalink to this headline">¶</a></h3>
+<p>There are a few templates you may be particularly interested in
+customizing for your installation.</p>
+<p><strong class="command">index.html.tmpl</strong>:
+This is the Bugzilla front page.</p>
+<p><strong class="command">global/header.html.tmpl</strong>:
+This defines the header that goes on all Bugzilla pages.
+The header includes the banner, which is what appears to users
+and is probably what you want to edit instead.  However the
+header also includes the HTML HEAD section, so you could for
+example add a stylesheet or META tag by editing the header.</p>
+<p><strong class="command">global/banner.html.tmpl</strong>:
+This contains the <tt class="docutils literal"><span class="pre">banner</span></tt>, the part of the header
+that appears
+at the top of all Bugzilla pages.  The default banner is reasonably
+barren, so you&#8217;ll probably want to customize this to give your
+installation a distinctive look and feel.  It is recommended you
+preserve the Bugzilla version number in some form so the version
+you are running can be determined, and users know what docs to read.</p>
+<p><strong class="command">global/footer.html.tmpl</strong>:
+This defines the footer that goes on all Bugzilla pages.  Editing
+this is another way to quickly get a distinctive look and feel for
+your Bugzilla installation.</p>
+<p><strong class="command">global/variables.none.tmpl</strong>:
+This defines a list of terms that may be changed in order to
+<tt class="docutils literal"><span class="pre">brand</span></tt> the Bugzilla instance In this way, terms
+like <tt class="docutils literal"><span class="pre">bugs</span></tt> can be replaced with <tt class="docutils literal"><span class="pre">issues</span></tt>
+across the whole Bugzilla installation. The name
+<tt class="docutils literal"><span class="pre">Bugzilla</span></tt> and other words can be customized as well.</p>
+<p><strong class="command">list/table.html.tmpl</strong>:
+This template controls the appearance of the bug lists created
+by Bugzilla. Editing this template allows per-column control of
+the width and title of a column, the maximum display length of
+each entry, and the wrap behaviour of long entries.
+For long bug lists, Bugzilla inserts a &#8216;break&#8217; every 100 bugs by
+default; this behaviour is also controlled by this template, and
+that value can be modified here.</p>
+<p><strong class="command">bug/create/user-message.html.tmpl</strong>:
+This is a message that appears near the top of the bug reporting page.
+By modifying this, you can tell your users how they should report
+bugs.</p>
+<p><strong class="command">bug/process/midair.html.tmpl</strong>:
+This is the page used if two people submit simultaneous changes to the
+same bug.  The second person to submit their changes will get this page
+to tell them what the first person did, and ask if they wish to
+overwrite those changes or go back and revisit the bug.  The default
+title and header on this page read &#8220;Mid-air collision detected!&#8221;  If
+you work in the aviation industry, or other environment where this
+might be found offensive (yes, we have true stories of this happening)
+you&#8217;ll want to change this to something more appropriate for your
+environment.</p>
+<p><strong class="command">bug/create/create.html.tmpl</strong> and
+<strong class="command">bug/create/comment.txt.tmpl</strong>:
+You may not wish to go to the effort of creating custom fields in
+Bugzilla, yet you want to make sure that each bug report contains
+a number of pieces of important information for which there is not
+a special field. The bug entry system has been designed in an
+extensible fashion to enable you to add arbitrary HTML widgets,
+such as drop-down lists or textboxes, to the bug entry page
+and have their values appear formatted in the initial comment.
+A hidden field that indicates the format should be added inside
+the form in order to make the template functional. Its value should
+be the suffix of the template filename. For example, if the file
+is called <tt class="file docutils literal"><span class="pre">create-cust.html.tmpl</span></tt>, then</p>
+<div class="highlight-python"><pre>&lt;input type="hidden" name="format" value="cust"&gt;</pre>
+</div>
+<p>should be used inside the form.</p>
+<p>An example of this is the mozilla.org
+<a class="reference external" href="http://landfill.bugzilla.org/bugzilla-tip/enter_bug.cgi?product=WorldControl;format=guided">guided
+bug submission form</a>. The code for this comes with the Bugzilla
+distribution as an example for you to copy. It can be found in the
+files
+<tt class="file docutils literal"><span class="pre">create-guided.html.tmpl</span></tt> and
+<tt class="file docutils literal"><span class="pre">comment-guided.html.tmpl</span></tt>.</p>
+<p>So to use this feature, create a custom template for
+<tt class="file docutils literal"><span class="pre">enter_bug.cgi</span></tt>. The default template, on which you
+could base it, is
+<tt class="file docutils literal"><span class="pre">custom/bug/create/create.html.tmpl</span></tt>.
+Call it <tt class="file docutils literal"><span class="pre">create-&lt;formatname&gt;.html.tmpl</span></tt>, and
+in it, add widgets for each piece of information you&#8217;d like
+collected - such as a build number, or set of steps to reproduce.</p>
+<p>Then, create a template like
+<tt class="file docutils literal"><span class="pre">custom/bug/create/comment.txt.tmpl</span></tt>, and call it
+<tt class="file docutils literal"><span class="pre">comment-&lt;formatname&gt;.txt.tmpl</span></tt>. This
+template should reference the form fields you have created using
+the syntax <tt class="file docutils literal"><span class="pre">[%</span> <span class="pre">form.&lt;fieldname&gt;</span> <span class="pre">%]</span></tt>. When a
+bug report is
+submitted, the initial comment attached to the bug report will be
+formatted according to the layout of this template.</p>
+<p>For example, if your custom enter_bug template had a field</p>
+<div class="highlight-python"><pre>&lt;input type="text" name="buildid" size="30"&gt;</pre>
+</div>
+<p>and then your comment.txt.tmpl had</p>
+<div class="highlight-python"><pre>BuildID: \[% form.buildid %]</pre>
+</div>
+<p>then something like</p>
+<div class="highlight-python"><pre>BuildID: 20020303</pre>
+</div>
+<p>would appear in the initial comment.</p>
+</div>
+<div class="section" id="configuring-bugzilla-to-detect-the-user-s-language">
+<span id="template-http-accept"></span><h3>Configuring Bugzilla to Detect the User&#8217;s Language<a class="headerlink" href="#configuring-bugzilla-to-detect-the-user-s-language" title="Permalink to this headline">¶</a></h3>
+<p>Bugzilla honours the user&#8217;s Accept: HTTP header. You can install
+templates in other languages, and Bugzilla will pick the most appropriate
+according to a priority order defined by you. Many
+language templates can be obtained from <a class="reference external" href="http://www.bugzilla.org/download.html#localizations">http://www.bugzilla.org/download.html#localizations</a>. Instructions
+for submitting new languages are also available from that location.</p>
+</div>
+</div>
+<div class="section" id="customizing-who-can-change-what">
+<span id="cust-change-permissions"></span><h2>Customizing Who Can Change What<a class="headerlink" href="#customizing-who-can-change-what" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This feature should be considered experimental; the Bugzilla code you
+will be changing is not stable, and could change or move between
+versions. Be aware that if you make modifications as outlined here,
+you may have
+to re-make them or port them if Bugzilla changes internally between
+versions, and you upgrade.</p>
+</div>
+<p>Companies often have rules about which employees, or classes of employees,
+are allowed to change certain things in the bug system. For example,
+only the bug&#8217;s designated QA Contact may be allowed to VERIFY the bug.
+Bugzilla has been
+designed to make it easy for you to write your own custom rules to define
+who is allowed to make what sorts of value transition.</p>
+<p>By default, assignees, QA owners and users
+with <em>editbugs</em> privileges can edit all fields of bugs,
+except group restrictions (unless they are members of the groups they
+are trying to change). Bug reporters also have the ability to edit some
+fields, but in a more restrictive manner. Other users, without
+<em>editbugs</em> privileges, cannot edit
+bugs, except to comment and add themselves to the CC list.</p>
+<p>For maximum flexibility, customizing this means editing Bugzilla&#8217;s Perl
+code. This gives the administrator complete control over exactly who is
+allowed to do what. The relevant method is called
+<tt class="file docutils literal"><span class="pre">check_can_change_field()</span></tt>,
+and is found in <tt class="file docutils literal"><span class="pre">Bug.pm</span></tt> in your
+Bugzilla/ directory. If you open that file and search for
+<tt class="docutils literal"><span class="pre">sub</span> <span class="pre">check_can_change_field</span></tt>, you&#8217;ll find it.</p>
+<p>This function has been carefully commented to allow you to see exactly
+how it works, and give you an idea of how to make changes to it.
+Certain marked sections should not be changed - these are
+the <tt class="docutils literal"><span class="pre">plumbing</span></tt> which makes the rest of the function work.
+In between those sections, you&#8217;ll find snippets of code like:</p>
+<div class="highlight-python"><pre># Allow the assignee to change anything.
+if ($ownerid eq $whoid) {
+return 1;
+}</pre>
+</div>
+<p>It&#8217;s fairly obvious what this piece of code does.</p>
+<p>So, how does one go about changing this function? Well, simple changes
+can be made just by removing pieces - for example, if you wanted to
+prevent any user adding a comment to a bug, just remove the lines marked
+<tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">anyone</span> <span class="pre">to</span> <span class="pre">change</span> <span class="pre">comments.</span></tt> If you don&#8217;t want the
+Reporter to have any special rights on bugs they have filed, just
+remove the entire section that deals with the Reporter.</p>
+<p>More complex customizations are not much harder. Basically, you add
+a check in the right place in the function, i.e. after all the variables
+you are using have been set up. So, don&#8217;t look at $ownerid before
+$ownerid has been obtained from the database. You can either add a
+positive check, which returns 1 (allow) if certain conditions are true,
+or a negative check, which returns 0 (deny.) E.g.:</p>
+<div class="highlight-python"><pre>if ($field eq "qacontact") {
+if (Bugzilla-&gt;user-&gt;in_group("quality_assurance")) {
+return 1;
+}
+else {
+return 0;
+}
+}</pre>
+</div>
+<p>This says that only users in the group &#8220;quality_assurance&#8221; can change
+the QA Contact field of a bug.</p>
+<p>Getting more weird:</p>
+<div class="highlight-python"><pre>if (($field eq "priority") &amp;&amp;
+(Bugzilla-&gt;user-&gt;email =~ /.*\\@example\\.com$/))
+{
+if ($oldvalue eq "P1") {
+return 1;
+}
+else {
+return 0;
+}
+}</pre>
+</div>
+<p>This says that if the user is trying to change the priority field,
+and their email address is &#64;example.com, they can only do so if the
+old value of the field was &#8220;P1&#8221;. Not very useful, but illustrative.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you are modifying <tt class="file docutils literal"><span class="pre">process_bug.cgi</span></tt> in any
+way, do not change the code that is bounded by DO_NOT_CHANGE blocks.
+Doing so could compromise security, or cause your installation to
+stop working entirely.</p>
+</div>
+<p>For a list of possible field names, look at the bugs table in the
+database. If you need help writing custom rules for your organization,
+ask in the newsgroup.</p>
+</div>
+<div class="section" id="integrating-bugzilla-with-third-party-tools">
+<span id="integration"></span><h2>Integrating Bugzilla with Third-Party Tools<a class="headerlink" href="#integrating-bugzilla-with-third-party-tools" title="Permalink to this headline">¶</a></h2>
+<p>Many utilities and applications can integrate with Bugzilla,
+either on the client- or server-side. None of them are maintained
+by the Bugzilla community, nor are they tested during our
+QA tests, so use them at your own risk. They are listed at
+<a class="reference external" href="https://wiki.mozilla.org/Bugzilla:Addons">https://wiki.mozilla.org/Bugzilla:Addons</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customizing Bugzilla</a><ul>
+<li><a class="reference internal" href="#bugzilla-extensions">Bugzilla Extensions</a></li>
+<li><a class="reference internal" href="#custom-skins">Custom Skins</a></li>
+<li><a class="reference internal" href="#template-customization">Template Customization</a><ul>
+<li><a class="reference internal" href="#template-directory-structure">Template Directory Structure</a></li>
+<li><a class="reference internal" href="#choosing-a-customization-method">Choosing a Customization Method</a></li>
+<li><a class="reference internal" href="#how-to-edit-templates">How To Edit Templates</a></li>
+<li><a class="reference internal" href="#template-formats-and-types">Template Formats and Types</a></li>
+<li><a class="reference internal" href="#particular-templates">Particular Templates</a></li>
+<li><a class="reference internal" href="#configuring-bugzilla-to-detect-the-user-s-language">Configuring Bugzilla to Detect the User&#8217;s Language</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customizing-who-can-change-what">Customizing Who Can Change What</a></li>
+<li><a class="reference internal" href="#integrating-bugzilla-with-third-party-tools">Integrating Bugzilla with Third-Party Tools</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/customization.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

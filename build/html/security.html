@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bugzilla Security &mdash; Bugzilla 4.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Bugzilla 4.4.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bugzilla-security">
+<span id="security"></span><h1>Bugzilla Security<a class="headerlink" href="#bugzilla-security" title="Permalink to this headline">¶</a></h1>
+<p>While some of the items in this chapter are related to the operating
+system Bugzilla is running on or some of the support software required to
+run Bugzilla, it is all related to protecting your data. This is not
+intended to be a comprehensive guide to securing Linux, Apache, MySQL, or
+any other piece of software mentioned. There is no substitute for active
+administration and monitoring of a machine. The key to good security is
+actually right in the middle of the word: <em>U R It</em>.</p>
+<p>While programmers in general always strive to write secure code,
+accidents can and do happen. The best approach to security is to always
+assume that the program you are working with isn&#8217;t 100% secure and restrict
+its access to other parts of your machine as much as possible.</p>
+<div class="section" id="operating-system">
+<span id="security-os"></span><h2>Operating System<a class="headerlink" href="#operating-system" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tcp-ip-ports">
+<span id="security-os-ports"></span><h3>TCP/IP Ports<a class="headerlink" href="#tcp-ip-ports" title="Permalink to this headline">¶</a></h3>
+<p>The TCP/IP standard defines more than 65,000 ports for sending
+and receiving traffic. Of those, Bugzilla needs exactly one to operate
+(different configurations and options may require up to 3). You should
+audit your server and make sure that you aren&#8217;t listening on any ports
+you don&#8217;t need to be. It&#8217;s also highly recommended that the server
+Bugzilla resides on, along with any other machines you administer, be
+placed behind some kind of firewall.</p>
+</div>
+<div class="section" id="system-user-accounts">
+<span id="security-os-accounts"></span><h3>System User Accounts<a class="headerlink" href="#system-user-accounts" title="Permalink to this headline">¶</a></h3>
+<p>Many daemons, such
+as Apache&#8217;s <tt class="file docutils literal"><span class="pre">httpd</span></tt> or MySQL&#8217;s
+<tt class="file docutils literal"><span class="pre">mysqld</span></tt>, run as either <tt class="docutils literal"><span class="pre">root</span></tt> or
+<tt class="docutils literal"><span class="pre">nobody</span></tt>. This is even worse on Windows machines where the
+majority of services
+run as <tt class="docutils literal"><span class="pre">SYSTEM</span></tt>. While running as <tt class="docutils literal"><span class="pre">root</span></tt> or
+<tt class="docutils literal"><span class="pre">SYSTEM</span></tt> introduces obvious security concerns, the
+problems introduced by running everything as <tt class="docutils literal"><span class="pre">nobody</span></tt> may
+not be so obvious. Basically, if you run every daemon as
+<tt class="docutils literal"><span class="pre">nobody</span></tt> and one of them gets compromised it can
+compromise every other daemon running as <tt class="docutils literal"><span class="pre">nobody</span></tt> on your
+machine. For this reason, it is recommended that you create a user
+account for each daemon.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need to set the <tt class="docutils literal"><span class="pre">webservergroup</span></tt> option
+in <tt class="file docutils literal"><span class="pre">localconfig</span></tt> to the group your web server runs
+as. This will allow <tt class="file docutils literal"><span class="pre">./checksetup.pl</span></tt> to set file
+permissions on Unix systems so that nothing is world-writable.</p>
+</div>
+</div>
+<div class="section" id="the-chroot-jail">
+<span id="security-os-chroot"></span><h3>The <tt class="file docutils literal"><span class="pre">chroot</span></tt> Jail<a class="headerlink" href="#the-chroot-jail" title="Permalink to this headline">¶</a></h3>
+<p>If your system supports it, you may wish to consider running
+Bugzilla inside of a <tt class="file docutils literal"><span class="pre">chroot</span></tt> jail. This option
+provides unprecedented security by restricting anything running
+inside the jail from accessing any information outside of it. If you
+wish to use this option, please consult the documentation that came
+with your system.</p>
+</div>
+</div>
+<div class="section" id="web-server">
+<span id="security-webserver"></span><h2>Web server<a class="headerlink" href="#web-server" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="disabling-remote-access-to-bugzilla-configuration-files">
+<span id="security-webserver-access"></span><h3>Disabling Remote Access to Bugzilla Configuration Files<a class="headerlink" href="#disabling-remote-access-to-bugzilla-configuration-files" title="Permalink to this headline">¶</a></h3>
+<p>There are many files that are placed in the Bugzilla directory
+area that should not be accessible from the web server. Because of the way
+Bugzilla is currently layed out, the list of what should and should not
+be accessible is rather complicated. A quick way is to run
+<tt class="file docutils literal"><span class="pre">testserver.pl</span></tt> to check if your web server serves
+Bugzilla files as expected. If not, you may want to follow the few
+steps below.</p>
+<ul>
+<li><p class="first">In the main Bugzilla directory, you should:
+- Block:</p>
+<blockquote>
+<div><p><tt class="file docutils literal"><span class="pre">*.pl</span></tt>, <tt class="file docutils literal"><span class="pre">*localconfig*</span></tt></p>
+</div></blockquote>
+</li>
+<li><p class="first">In <tt class="file docutils literal"><span class="pre">data</span></tt>:
+- Block everything</p>
+</li>
+<li><p class="first">In <tt class="file docutils literal"><span class="pre">data/webdot</span></tt>:
+- If you use a remote webdot server:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Block everything</li>
+<li>But allow
+<tt class="file docutils literal"><span class="pre">*.dot</span></tt>
+only for the remote webdot server</li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p class="first">Otherwise, if you use a local GraphViz:
+- Block everything
+- But allow:</p>
+<blockquote>
+<div><p><tt class="file docutils literal"><span class="pre">*.png</span></tt>, <tt class="file docutils literal"><span class="pre">*.gif</span></tt>, <tt class="file docutils literal"><span class="pre">*.jpg</span></tt>, <tt class="file docutils literal"><span class="pre">*.map</span></tt></p>
+</div></blockquote>
+</li>
+<li><p class="first">And if you don&#8217;t use any dot:
+- Block everything</p>
+</li>
+</ul>
+</li>
+<li><p class="first">In <tt class="file docutils literal"><span class="pre">Bugzilla</span></tt>:
+- Block everything</p>
+</li>
+<li><p class="first">In <tt class="file docutils literal"><span class="pre">template</span></tt>:
+- Block everything</p>
+</li>
+</ul>
+<p>Be sure to test that data that should not be accessed remotely is
+properly blocked. Of particular interest is the localconfig file which
+contains your database password. Also, be aware that many editors
+create temporary and backup files in the working directory and that
+those should also not be accessible. For more information, see
+<a class="reference external" href="http://bugzilla.mozilla.org/show_bug.cgi?id=186383">bug 186383</a>
+or
+<a class="reference external" href="http://online.securityfocus.com/bid/6501">Bugtraq ID 6501</a>.
+To test, simply run <tt class="file docutils literal"><span class="pre">testserver.pl</span></tt>, as said above.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Be sure to check <a class="reference internal" href="installation.html#http"><em>Web server</em></a> for instructions
+specific to the web server you use.</p>
+</div>
+</div>
+</div>
+<div class="section" id="bugzilla">
+<span id="security-bugzilla"></span><h2>Bugzilla<a class="headerlink" href="#bugzilla" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prevent-users-injecting-malicious-javascript">
+<span id="security-bugzilla-charset"></span><h3>Prevent users injecting malicious Javascript<a class="headerlink" href="#prevent-users-injecting-malicious-javascript" title="Permalink to this headline">¶</a></h3>
+<p>If you installed Bugzilla version 2.22 or later from scratch,
+then the <em>utf8</em> parameter is switched on by default.
+This makes Bugzilla explicitly set the character encoding, following
+<a class="reference external" href="http://www.cert.org/tech_tips/malicious_code_mitigation.html#3">a
+CERT advisory</a> recommending exactly this.
+The following therefore does not apply to you; just keep
+<em>utf8</em> turned on.</p>
+<p>If you&#8217;ve upgraded from an older version, then it may be possible
+for a Bugzilla user to take advantage of character set encoding
+ambiguities to inject HTML into Bugzilla comments.
+This could include malicious scripts.
+This is because due to internationalization concerns, we are unable to
+turn the <em>utf8</em> parameter on by default for upgraded
+installations.
+Turning it on manually will prevent this problem.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bugzilla Security</a><ul>
+<li><a class="reference internal" href="#operating-system">Operating System</a><ul>
+<li><a class="reference internal" href="#tcp-ip-ports">TCP/IP Ports</a></li>
+<li><a class="reference internal" href="#system-user-accounts">System User Accounts</a></li>
+<li><a class="reference internal" href="#the-chroot-jail">The <tt class="file docutils literal"><span class="pre">chroot</span></tt> Jail</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#web-server">Web server</a><ul>
+<li><a class="reference internal" href="#disabling-remote-access-to-bugzilla-configuration-files">Disabling Remote Access to Bugzilla Configuration Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bugzilla">Bugzilla</a><ul>
+<li><a class="reference internal" href="#prevent-users-injecting-malicious-javascript">Prevent users injecting malicious Javascript</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/security.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Bugzilla 4.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, The Bugzilla Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
